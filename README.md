@@ -52,10 +52,12 @@ p.method();
 ```js
   Polynomial.method();
 ```
-
-Method | Parameter | Type     | Description                |
-:----  | :-------- | :------- | :------------------------- |
-name      | `api_key` | `string` | **Required**. Your API key |
+| Name         | Parameters                                         | Return                                                                                                                                       |
+|--------------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `setVars`    | `vars: string[]`: vars considered for polynomials  | `void`                                                                                                                                       |
+| `expGreater` | `a,b: number[]`: exponents to compare              | `boolean`: $a >_{\text{lex}} b$. If lengths doesn't macth, returns `false`                                                                   |
+| `getVars`    | -                                                  | `string[]`: vars considered for polynomials                                                                                                  |
+| `monomial`   | `exp: number[]`                                    | `Polynomial`: monomial $p$ with $\exp(p) = \text{exp}$ and $\text{lc}(p)=1$. If the exponent length is not the same as `vars` returns $p=0$  |
 
 
 ## Running Tests
