@@ -31,10 +31,21 @@ TO DO
 p = new Polynomial("x");
 p.method();
 ```
-
-Method | Parameter | Type     | Description                |
-:----  | :-------- | :------- | :------------------------- |
-name      | `api_key` | `string` | **Required**. Your API key |
+| Method          | Parameters                                                      | Return                                                             |
+|---------------|-----------------------------------------------------------------|--------------------------------------------------------------------|
+| `equals`      | `q: Polynomial`: polynomial to compare with                     | `boolean`: $p == q$                                                |
+| `exp`         | `vars: string[] = Polynomial.vars`: variables in the polynomial | `number[]`: $\exp(p)$ using *lex*                                  |
+| `getCoefMap`  | -                                                               | `Map<string,string>`: map pairing each monomial to its coefficient |
+| `getVarOrder` | -                                                               | `string[]`: monomials of $p$ ordered by *lex*                      |
+| `isZero`      |                                                                 | `boolean`: $p == 0$                                                |
+| `lc`          | -                                                               | `string`: leader coefficient of $p$                                |
+| `lm`          | -                                                               | `string`: leader monomial of $p$                                   |
+| `lt`          | -                                                               | `string`: leader term of $p$                                       |
+| `minus`       | `q: Polynomial`: polynomial to substract                        | `Polynomial`: $p-q$                                                |
+| `multiply`    | `q: Polynomial`: polynomial to multiply with                    | `Polynomial`: $p*q$                                                |
+| `plus`        | `q: Polynomial`: polynomial to sum with                         | `Polynomial`: $p+q$                                                |
+| `supp`        | -                                                               | `number[][]`: support of $p$                                       |
+| `toString`    | -                                                               | `string`: representation of $p$ using *lex*                        |
 
 ### Static methods
 
