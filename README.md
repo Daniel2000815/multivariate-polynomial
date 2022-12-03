@@ -31,8 +31,10 @@ TO DO
 p = new Polynomial("x");
 p.method();
 ```
-| Method          | Parameters                                                      | Return                                                             |
+| Method        | Parameters                                                      | Return                                                             |
 |---------------|-----------------------------------------------------------------|--------------------------------------------------------------------|
+| `clone`       | -                                                               | `Polynomial`: copy of $p$                                          |
+| `divide`      | `fs: Polynomial[]`: polynomials to divide with <br/>`maxIter: number = 1000`: limit of iterations allowed <br/>`verbose: boolean = false`: should also return a list of steps followed | `{ quotients: Polynomial[], remainder: Polynomial, steps?: {string: any}} }`: quotients of each polynomial in `fs`, remainder and steps if `verbose` |
 | `equals`      | `q: Polynomial`: polynomial to compare with                     | `boolean`: $p == q$                                                |
 | `exp`         | `vars: string[] = Polynomial.vars`: variables in the polynomial | `number[]`: $\exp(p)$ using *lex*                                  |
 | `getCoefMap`  | -                                                               | `Map<string,string>`: map pairing each monomial to its coefficient |
