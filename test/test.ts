@@ -562,19 +562,19 @@ const zeroTests = [
 //     }
 //   });
 
-  describe("Reduced Groebner basis computation", function () {
-    this.timeout(10000);
+  // describe("Reduced Groebner basis computation", function () {
+  //   this.timeout(10000);
 
-    for (var i = 0; i < isGroebnerBasisTests.length; i++) {
-      (function (i) {
-        var t = isGroebnerBasisTests[i];
-        const F = t.ideal.map((val: string) => new Polynomial(val));
+  //   for (var i = 0; i < isGroebnerBasisTests.length; i++) {
+  //     (function (i) {
+  //       var t = isGroebnerBasisTests[i];
+  //       const F = t.ideal.map((val: string) => new Polynomial(val));
   
-        it(`I= < ${
-          t.ideal
-        } >`, function () {
-          assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
-        });
-      })(i);
-    }
-  });
+  //       it(`I= < ${
+  //         t.ideal
+  //       } >`, function () {
+  //         assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
+  //       });
+  //     })(i);
+  //   }
+  // });
