@@ -5,7 +5,7 @@ require("nerdamer/algebra");
 export default class Polynomial {
   private coefMap: Map<string, string> = new Map();
   private varOrder: string[] = [];
-  static vars: string[] = ["t", "x", "y", "z"];
+  static #vars: string[] = ["t", "x", "y", "z"];
 
   constructor(p: string) {
     var pol = "";
@@ -23,16 +23,36 @@ export default class Polynomial {
     // console.log("POL CREADO ", this.toString());
   }
 
+  clone() : Polynomial {
+    let p = new Polynomial("0");
+    p.coefMap = this.coefMap;
+    p.varOrder = this.varOrder;
+
+    return p;
+  }
+
+  /**
+   * 
+   * @returns map pairing each monomial to its coefficient
+   */
   getCoefMap() {
     return this.coefMap;
   }
 
+  /**
+   * 
+   * @returns variables of the polynomial ordered by *lex*
+   */
   getVarOrder() {
     return this.varOrder;
   }
 
   // === PUBLIC INSTANCE METHODS ===
-  /** Multiply this polynomial by q */
+  /**
+   * 
+   * @param q polynomial to multiply with
+   * @returns product with the polynomial `q`
+   */
   multiply(q: Polynomial) {
     let product = "";
 
@@ -48,7 +68,12 @@ export default class Polynomial {
     return new Polynomial(product);
   }
 
-  /** Add q to this polynomial */
+  // === PUBLIC INSTANCE METHODS ===
+  /**
+   * 
+   * @param q polynomial to sum with
+   * @returns sum with the polynomial `q`
+   */
   plus(q: Polynomial) {
     let sum = "0";
     // console.log(this.coefMap, q.coefMap);
@@ -66,7 +91,12 @@ export default class Polynomial {
     return new Polynomial(sum);
   }
 
-  /** Substract q to this polynomial */
+  // === PUBLIC INSTANCE METHODS ===
+  /**
+   * 
+   * @param q polynomial to substract
+   * @returns this polynomial minus `q`
+   */
   minus(q: Polynomial) {
     let sum = "0";
 
@@ -121,19 +151,28 @@ export default class Polynomial {
     return res;
   }
 
-  /** Leader coefficient */
+  /**
+   * 
+   * @returns Leader coefficient
+   */
   lc() {
     const coef = this.coefMap.get(this.varOrder[0]);
 
     return coef ? coef : "0";
   }
 
-  /** Leader monomial */
+  /**
+   * 
+   * @returns Leader monomial
+   */
   lm() {
     return this.varOrder[0];
   }
 
-  /** Leader term */
+  /**
+   * 
+   * @returns Leader term
+   */
   lt() {
     const coef1 = this.lc() !== "1";
     if (this.lc() === "0") return "0";
@@ -144,8 +183,9 @@ export default class Polynomial {
   /**
    * Exponent of this polynomial
    * @param vars Variables in the ring. Default is t,x,y,z
+   * @return exponent of `p` using *lex*
    */
-  exp(vars: string[] = Polynomial.vars): number[] {
+  exp(vars: string[] = Polynomial.#vars): number[] {
     let res: number[] = Array(vars.length).fill(0);
 
     this.coefMap.forEach((coef: string, mon: string) => {
@@ -171,17 +211,128 @@ export default class Polynomial {
     return res;
   }
 
+  /**
+   * 
+   * @returns Support of the polynomial
+   */
   supp() : number[][] {
     return this.varOrder.map((val: string) => new Polynomial(val).exp());
   }
 
-
+  /**
+   * 
+   * @returns Polynomial is zero
+   */
   isZero() : boolean {
     const n = this.coefMap.size;
 
     return n === 0 || (n === 1 && this.coefMap.values().next().value === "0");
   }
 
+  /**
+   * Divide by a set of polynomials fs = [f_1, ..., f_n] using *lex*
+   * @param fs polynomials to divide with
+   * @param maxIter limit of iterations allowed
+   * @param verbose should return process steps
+   * @returns quotients for each polynomial in fs, remainder and steps if `verbose`
+   */
+  divide(fs: Polynomial[], maxIter: number = 1000, verbose: boolean = false) {
+    let nSteps = 0;
+    var steps: { [k: string]: any } = {};
+    let step: string[] = [];
+    let currIt = 0;
+    const s = fs.length;
+
+    let p = this.clone();
+    let r = new Polynomial("0");
+    let coefs: Polynomial[] = Array(s).fill(new Polynomial("0"));
+
+    while (!p.isZero() && currIt < maxIter) {
+      nSteps++;
+      currIt++;
+      let i = 0;
+      let divFound = 0;
+      const exp_p = p.exp();
+
+      while (i < s && divFound === 0) {
+        const exp_fi = fs[i].exp();
+        const gamma = Polynomial.#expMinus(exp_p, exp_fi);
+
+        step = [];
+
+        if (gamma.every((item) => item >= 0)) {
+          const xGamma = Polynomial.monomial(gamma);
+          const lcp = p.lc();
+          const lcfi = fs[i].lc();
+
+          const coef = xGamma.multiply(new Polynomial(`(${lcp}) / (${lcfi})`));
+
+          let newQi = coefs[i].plus(coef);
+          let newP = p.minus(fs[i].multiply(coef));
+
+          step.push(`f = ${p}`);
+          step.push(
+            `exp(f) - exp(f_${i})= ${exp_p} - ${exp_fi} => We can divide`
+          );
+          step.push(`q_${i} = (${coefs[i]}) + (${coef}) = ${newQi}`);
+          step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${newP}`);
+          step.push(p.toString());
+          coefs[i] = newQi;
+
+          p = newP;
+          divFound = 1;
+        } else {
+          i++;
+        }
+      }
+      if (divFound === 0) {
+        const LC = p.lc();
+        const MON = Polynomial.monomial(exp_p);
+        const lt = MON.multiply(new Polynomial(LC.toString()));
+
+        const newR = r.plus(lt);
+        const newP = p.minus(lt);
+
+        step.push("No division posible:");
+        step.push(`lt(p) = (${LC})*(${MON}) = ${lt}`);
+        step.push(`r = (${r}) + lt(p) = ${newR}`);
+        step.push(`p = (${p}) - lt(p) = ${newP}`);
+
+        r = newR;
+        p = newP;
+      }
+
+      steps[`step${nSteps}`] = step;
+    }
+
+    step = [];
+
+    let mult = new Polynomial("0");
+    step.push(`r = ${r}`);
+    coefs.forEach((qi, i) => {
+      step.push(`q_${i} = ${qi}`);
+      mult = mult.plus(qi.multiply(fs[i]));
+    });
+
+    mult = mult.plus(r);
+    mult = mult.minus(this);
+
+    steps["result"] = step;
+
+    if (!mult.isZero())
+      console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN ${fs}`);
+
+    return {
+      quotients: [...coefs],
+      remainder: r,
+      steps: steps,
+    };
+  }
+
+  /**
+   * 
+   * @returns string representation of the polynomial using *lex*
+   */
   toString() {
     let res = "";
 
@@ -212,31 +363,42 @@ export default class Polynomial {
   }
 
   // === PUBLIC STATIC METHODS ===
+  /**
+   * Sets the vars considered for the polynomials
+   * @param vars 
+   */
   static setVars(vars: string[]) {
-    this.vars = vars;
+    this.#vars = vars;
   }
 
   static getVars() {
-    return this.vars;
+    return this.#vars;
   }
 
-  /** Builds a monomial with the given exponent and lc=1 */
+  /**
+   * Builds a monomial with the given exponent and lc=1
+   * @param exp 
+   * @returns monomial with exponent equal to `exp` and lc=1. If error returns 0
+   */
   static monomial(exp: number[]) {
-    if (exp.length !== Polynomial.vars.length) {
+    if (exp.length !== Polynomial.#vars.length) {
       console.error("ERROR: EXPONENT NOT VALID");
       return new Polynomial("0");
     }
 
     let pol = "";
 
-    Polynomial.vars.forEach(function (value, idx) {
+    Polynomial.#vars.forEach(function (value, idx) {
       pol += `(${value})^(${exp[idx]})`;
     });
 
     return new Polynomial(pol);
   }
 
-  // === PRIVATE STATIC METHODS (not private yet) ===
+  /**
+   * 
+   * @returns a>b using lex. If error, returns false
+   */
   static expGreater(a: number[], b: number[]) {
     if (a.length !== b.length) {
       return false;
@@ -250,13 +412,16 @@ export default class Polynomial {
     return false;
   }
 
-  static expMinus(a: number[], b: number[]) {
+  // === PRIVATE STATIC METHODS===
+  
+
+  static #expMinus(a: number[], b: number[]) {
     if (a.length !== b.length) return [];
 
     return a.map((val, idx) => val - b[idx]);
   }
 
-  static arrayCombinations(array: Polynomial[]) {
+  static #arrayCombinations(array: Polynomial[]) {
     var result = array.flatMap((v, i) => array.slice(i + 1).map((w) => [v, w]));
     return result;
   }
@@ -264,16 +429,14 @@ export default class Polynomial {
   /**
    *
    * @param F Generator of the ideal I = <F>
-   * @param G Supposed Groebner base
+   * @param G Supposed Groebner basis
+   * @return `G` is a Groebner basis of <`F`>
    */
-  static isGroebnerBase(F: Polynomial[], G: Polynomial[]) {
-    const fgPairs = this.arrayCombinations(F);
+  static isGroebnerBasis(F: Polynomial[], G: Polynomial[]) {
+    const fgPairs = this.#arrayCombinations(F);
 
     for (let i = 0; i < fgPairs.length; i++) {
-      const r = this.divide(
-        this.sPol(fgPairs[i][0], fgPairs[i][1]),
-        G
-      ).remainder;
+      const r = this.sPol(fgPairs[i][0], fgPairs[i][1]).divide(G).remainder;
 
       if (!r.isZero()){
         return false
@@ -283,17 +446,23 @@ export default class Polynomial {
     return true;
   }
 
-  static exp(G: Polynomial[]){
-    return G.map((g: Polynomial) => g.exp());
+  /**
+   * 
+   * @param F 
+   * @returns array of exponents of each polynomial in `F`
+   */
+  static exp(F: Polynomial[]){
+    return F.map((f: Polynomial) => f.exp());
   }
 
   /**
    *
    * @param F Generator of the ideal I = <F>
-   * @param G Supposed Groebner base
+   * @param G Supposed Groebner basis
+   * @return `G` is a reduced Groebner basis of <`F`>
    */
-  static isReducedGroebnerBase(F: Polynomial[], G: Polynomial[]) {
-    if (!this.isGroebnerBase(F, G)) return false;
+  static isReducedGroebnerBasis(F: Polynomial[], G: Polynomial[]) {
+    if (!this.isGroebnerBasis(F, G)) return false;
 
     for(let i=0; i<G.length; i++){
       const g = G[i];
@@ -306,7 +475,7 @@ export default class Polynomial {
 
       for(let j=0; j<suppG.length; j++){
         for(let k=0; k<expNewG.length; k++){
-          if(!this.expMinus(suppG[j],expNewG[k]).some((item) => item < 0))
+          if(!this.#expMinus(suppG[j],expNewG[k]).some((item) => item < 0))
             return false;
         }
       }
@@ -315,98 +484,7 @@ export default class Polynomial {
     return true;
   }
 
-  static divide(f: Polynomial, fs: Polynomial[], maxIter: number = 1000) {
-    let nSteps = 0;
-    var steps: { [k: string]: any } = {};
-    let step: string[] = [];
-    let currIt = 0;
-    const s = fs.length;
-
-    let p = f;
-    let r = new Polynomial("0");
-    let coefs: Polynomial[] = Array(s).fill(new Polynomial("0"));
-
-    while (!p.isZero() && currIt < maxIter) {
-      nSteps++;
-      currIt++;
-      let i = 0;
-      let divFound = 0;
-      const exp_p = p.exp();
-
-      while (i < s && divFound === 0) {
-        const exp_fi = fs[i].exp();
-        const gamma = this.expMinus(exp_p, exp_fi);
-
-        step = [];
-
-        if (gamma.every((item) => item >= 0)) {
-          const xGamma = this.monomial(gamma);
-          const lcp = p.lc();
-          const lcfi = fs[i].lc();
-
-          const coef = xGamma.multiply(new Polynomial(`(${lcp}) / (${lcfi})`));
-
-          let newQi = coefs[i].plus(coef);
-          let newP = p.minus(fs[i].multiply(coef));
-
-          step.push(`f = ${p}`);
-          step.push(
-            `exp(f) - exp(f_${i})= ${exp_p} - ${exp_fi} => We can divide`
-          );
-          step.push(`q_${i} = (${coefs[i]}) + (${coef}) = ${newQi}`);
-          step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${newP}`);
-          step.push(p.toString());
-          coefs[i] = newQi;
-
-          p = newP;
-          divFound = 1;
-        } else {
-          i++;
-        }
-      }
-      if (divFound === 0) {
-        const LC = p.lc();
-        const MON = this.monomial(exp_p);
-        const lt = MON.multiply(new Polynomial(LC.toString()));
-
-        const newR = r.plus(lt);
-        const newP = p.minus(lt);
-
-        step.push("No division posible:");
-        step.push(`lt(p) = (${LC})*(${MON}) = ${lt}`);
-        step.push(`r = (${r}) + lt(p) = ${newR}`);
-        step.push(`p = (${p}) - lt(p) = ${newP}`);
-
-        r = newR;
-        p = newP;
-      }
-
-      steps[`step${nSteps}`] = step;
-    }
-
-    step = [];
-
-    let mult = new Polynomial("0");
-    step.push(`r = ${r}`);
-    coefs.forEach((qi, i) => {
-      step.push(`q_${i} = ${qi}`);
-      mult = mult.plus(qi.multiply(fs[i]));
-    });
-
-    mult = mult.plus(r);
-    mult = mult.minus(f);
-
-    steps["result"] = step;
-
-    if (!mult.isZero())
-      console.error(`ERROR COMPUTING DIVISION OF ${f} IN ${fs}`);
-
-    return {
-      quotients: [...coefs],
-      remainder: r,
-      steps: steps,
-    };
-  }
+  
 
   /**
    *
@@ -437,18 +515,18 @@ export default class Polynomial {
     const beta = g.exp();
     const gamma = this.lcm(alpha, beta);
 
-    return this.monomial(this.expMinus(gamma, alpha))
+    return this.monomial(this.#expMinus(gamma, alpha))
       .multiply(f)
-      .minus(this.monomial(this.expMinus(gamma, beta)).multiply(g));
+      .minus(this.monomial(this.#expMinus(gamma, beta)).multiply(g));
   }
 
   /**
    *
    * @param F Generator of the ideal I = <F>
    * @param maxIter maximum iterations
-   * @returns Groebner base of I
+   * @returns Groebner basis of I
    */
-  static buchberger(F: Polynomial[], maxIter: number = 1000) {
+  static buchberger(F: Polynomial[], maxIter: number = 10000) {
     let currIt = 0;
     let G = F;
     let added;
@@ -456,15 +534,12 @@ export default class Polynomial {
     do {
       currIt++;
       let newG = Array.from(G);
-      const fgPairs = this.arrayCombinations(newG);
+      const fgPairs = this.#arrayCombinations(newG);
 
       added = false;
 
       for (let i = 0; i < fgPairs.length && !added; i++) {
-        const r = this.divide(
-          this.sPol(fgPairs[i][0], fgPairs[i][1]),
-          newG
-        ).remainder;
+        const r = this.sPol(fgPairs[i][0], fgPairs[i][1]).divide(newG).remainder;
 
         if (!r.isZero()) {
           G.push(r);
@@ -473,17 +548,19 @@ export default class Polynomial {
       }
     } while (added && currIt < maxIter);
 
-    if (!this.isGroebnerBase(F, G))
-      console.error(`ERROR COMPUTING GROEBNER BASE OF ${F}`);
+    if (!this.isGroebnerBasis(F, G)){
+      console.error(`ERROR COMPUTING GROEBNER BASIS OF ${F}`);
+      return [new Polynomial("0")];
+    }
 
     return G;
   }
 
   /**
    *
-   * @param F Generator of the ideal I = <F>
-   * @param maxIter maximum iterations
-   * @returns Groebner reduced base of I
+   * @param F Generator of the ideal generated by F
+   * @param  maxIter {number=1000} Maximum iterations
+   * @returns Groebner reduced basis of I
    */
   static buchbergerReduced(F: Polynomial[], maxIter: number = 1000) {
     let currIt = 0;
@@ -495,18 +572,14 @@ export default class Polynomial {
       added = false;
 
       let newG = Array.from(G);
-      const fgPairs = this.arrayCombinations(newG);
+      const fgPairs = this.#arrayCombinations(newG);
 
       for (let i = 0; i < fgPairs.length && !added; i++) {
         const f = fgPairs[i][0];
         const g = fgPairs[i][1];
 
-        if (this.criterion1(f, g) /*&& this.criterion2(f,g,G)*/) {
-          const r = this.divide(
-            this.sPol(fgPairs[i][0], fgPairs[i][1]),
-            newG,
-            maxIter
-          ).remainder;
+        if (/*this.#criterion1(f, g) &&*/ !this.#criterion2(f,g,G)) {
+          const r = this.sPol(fgPairs[i][0], fgPairs[i][1]).divide(newG,maxIter).remainder;
 
           if (!r.isZero()) {
             G.push(r);
@@ -516,13 +589,15 @@ export default class Polynomial {
       }
     } while (added && currIt < maxIter);
 
-    if (!this.isGroebnerBase(F, G))
-      console.error(`ERROR COMPUTING GROEBNER BASE OF ${F}`);
-
-    return G;
+    if (!this.isGroebnerBasis(F, G))
+      console.error(`ERROR COMPUTING REDUCED GROEBNER BASIS OF ${F}`);
+    // if(!this.isReducedGroebnerBasis(F,G))
+    //   console.error(`COMPUTED GROEBNER BASIS OF ${F} IS NOT REDUCED`);
+    
+      return G;
   }
 
-  static criterion1(f: Polynomial, g: Polynomial): boolean {
+  static #criterion1(f: Polynomial, g: Polynomial): boolean {
     const lcmFG = this.lcm(f.exp(), g.exp());
 
     const expF = f.exp();
@@ -545,7 +620,7 @@ export default class Polynomial {
   /**
    * Cheacks if a is an integer multiple of b
    */
-  static expIsMultiple(a: number[], b: number[]) {
+  static #expIsMultiple(a: number[], b: number[]) {
     if (a.length !== b.length) return false;
 
     let res = true;
@@ -561,7 +636,7 @@ export default class Polynomial {
     return res;
   }
 
-  static criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
+  static #criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
     // return false;
 
     const a = this.lcm(gi.exp(), gj.exp());
@@ -569,7 +644,7 @@ export default class Polynomial {
     let res = false;
 
     for (let i = startIndex; i < G.length && !res; i++) {
-      if (this.expIsMultiple(a, G[i].exp())) res = true;
+      if (this.#expIsMultiple(a, G[i].exp())) res = true;
     }
 
     return res;
@@ -614,7 +689,7 @@ export default class Polynomial {
         // Si nos encontramos con una variable, dejamos de escribir en coef. Si no encontramos
         // ningun coeficiente, significa que es 1, y si el coeficiente es -, significa que es -1
 
-        if (Polynomial.vars.includes(pol[i])) {
+        if (Polynomial.#vars.includes(pol[i])) {
           writingCoef = false;
 
           if (coef.length === 0) coef = "1";
@@ -640,8 +715,8 @@ export default class Polynomial {
     let monomials = Array.from(this.coefMap.keys());
     monomials.sort(function (a, b) {
       return Polynomial.expGreater(
-        new Polynomial(a).exp(Polynomial.vars),
-        new Polynomial(b).exp(Polynomial.vars)
+        new Polynomial(a).exp(Polynomial.#vars),
+        new Polynomial(b).exp(Polynomial.#vars)
       )
         ? -1
         : 1;
