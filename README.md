@@ -1,6 +1,6 @@
 # multivariate-polynomial
 
-A javascript library to work with polynomials in Q and multiple variables.
+A javascript library to work with polynomials in $\mathbb{Q}$ and multiple variables.
 
 ## Usage/Examples
 
