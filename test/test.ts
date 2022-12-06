@@ -323,244 +323,244 @@ const zeroTests = [
   { p: "0*1", res: true },
 ];
 
-// describe("Security", function () {
-//   it("Initialized with empty string returns 0", function () {
-//     const p = new Polynomial("");
-//     assert(p.equals(new Polynomial("0")));
-//   });
-// });
+describe("Security", function () {
+  it("Initialized with empty string returns 0", function () {
+    const p = new Polynomial("");
+    assert(p.equals(new Polynomial("0")));
+  });
+});
 
-// describe("Initialization", function () {
-//   for (var i = 0; i < initTests.length; i++) {
-//     (function (i) {
-//       var t = initTests[i];
+describe("Initialization", function () {
+  for (var i = 0; i < initTests.length; i++) {
+    (function (i) {
+      var t = initTests[i];
 
-//       it(`p = ${t.p}`, function () {
-//         const p = new Polynomial(t.p);
-//         const pCoefMap = p.getCoefMap();
+      it(`p = ${t.p}`, function () {
+        const p = new Polynomial(t.p);
+        const pCoefMap = p.getCoefMap();
 
-//         if (t.map.size !== pCoefMap.size) assert(false);
-//         pCoefMap.forEach((val: string, key: string) => {
-//           if (t.map.has(key)) {
-//             if (val !== t.map.get(key)) {
-//               assert(false);
-//             }
-//           } else {
-//             assert(false);
-//           }
-//         });
+        if (t.map.size !== pCoefMap.size) assert(false);
+        pCoefMap.forEach((val: string, key: string) => {
+          if (t.map.has(key)) {
+            if (val !== t.map.get(key)) {
+              assert(false);
+            }
+          } else {
+            assert(false);
+          }
+        });
 
-//         const pOrder = p.getVarOrder();
-//         if (t.order.length !== pOrder.length) assert(false);
+        const pOrder = p.getVarOrder();
+        if (t.order.length !== pOrder.length) assert(false);
 
-//         pOrder.forEach((val: string, index) => {
-//           if (t.order[index] !== val) assert(false);
-//         });
+        pOrder.forEach((val: string, index) => {
+          if (t.order[index] !== val) assert(false);
+        });
 
-//         assert(true);
-//       });
-//     })(i);
-//   }
-// });
+        assert(true);
+      });
+    })(i);
+  }
+});
 
-// describe("To string", function () {
-//   for (var i = 0; i < stringTests.length; i++) {
-//     (function (i) {
-//       var t = stringTests[i];
+describe("To string", function () {
+  for (var i = 0; i < stringTests.length; i++) {
+    (function (i) {
+      var t = stringTests[i];
 
-//       it(`${t.p}`, function () {
-//         assert.equal(new Polynomial(t.p).toString(), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`${t.p}`, function () {
+        assert.equal(new Polynomial(t.p).toString(), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Equality", function () {
-//   for (var i = 0; i < eqTest.length; i++) {
-//     (function (i) {
-//       var t = eqTest[i];
+describe("Equality", function () {
+  for (var i = 0; i < eqTest.length; i++) {
+    (function (i) {
+      var t = eqTest[i];
 
-//       it(`${t.p1} ${t.res ? "==" : "!="} ${t.p2}`, function () {
-//         assert.equal(new Polynomial(t.p1).equals(new Polynomial(t.p2)), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`${t.p1} ${t.res ? "==" : "!="} ${t.p2}`, function () {
+        assert.equal(new Polynomial(t.p1).equals(new Polynomial(t.p2)), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Operations", function () {
-//   for (var i = 0; i < opTests.length; i++) {
-//     (function (i) {
-//       var t = opTests[i];
+describe("Operations", function () {
+  for (var i = 0; i < opTests.length; i++) {
+    (function (i) {
+      var t = opTests[i];
 
-//       it(`(${t.p1}) ${t.op} (${t.p2}) == ${t.res} `, function () {
-//         switch (t.op) {
-//           case "+":
-//             assert(
-//               new Polynomial(t.p1)
-//                 .plus(new Polynomial(t.p2))
-//                 .equals(new Polynomial(t.res))
-//             );
-//             break;
-//           case "-":
-//             assert(
-//               new Polynomial(t.p1)
-//                 .minus(new Polynomial(t.p2))
-//                 .equals(new Polynomial(t.res))
-//             );
-//             break;
-//           case "*":
-//             assert(
-//               new Polynomial(t.p1)
-//                 .multiply(new Polynomial(t.p2))
-//                 .equals(new Polynomial(t.res))
-//             );
-//             break;
-//           default:
-//             assert(false);
-//         }
-//       });
-//     })(i);
-//   }
-// });
+      it(`(${t.p1}) ${t.op} (${t.p2}) == ${t.res} `, function () {
+        switch (t.op) {
+          case "+":
+            assert(
+              new Polynomial(t.p1)
+                .plus(new Polynomial(t.p2))
+                .equals(new Polynomial(t.res))
+            );
+            break;
+          case "-":
+            assert(
+              new Polynomial(t.p1)
+                .minus(new Polynomial(t.p2))
+                .equals(new Polynomial(t.res))
+            );
+            break;
+          case "*":
+            assert(
+              new Polynomial(t.p1)
+                .multiply(new Polynomial(t.p2))
+                .equals(new Polynomial(t.res))
+            );
+            break;
+          default:
+            assert(false);
+        }
+      });
+    })(i);
+  }
+});
 
-// describe("Exp greater", function () {
-//   for (var i = 0; i < expGreaterTests.length; i++) {
-//     (function (i) {
-//       var t = expGreaterTests[i];
+describe("Exp greater", function () {
+  for (var i = 0; i < expGreaterTests.length; i++) {
+    (function (i) {
+      var t = expGreaterTests[i];
 
-//       it(`${t.e1} ${t.res ? ">" : "<="} ${t.e2}`, function () {
-//         assert.equal(Polynomial.expGreater(t.e1, t.e2), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`${t.e1} ${t.res ? ">" : "<="} ${t.e2}`, function () {
+        assert.equal(Polynomial.expGreater(t.e1, t.e2), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Exp", function () {
-//   for (var i = 0; i < expTests.length; i++) {
-//     (function (i) {
-//       var t = expTests[i];
+describe("Exp", function () {
+  for (var i = 0; i < expTests.length; i++) {
+    (function (i) {
+      var t = expTests[i];
 
-//       it(`exp(${t.p}) = ${t.res}`, function () {
-//         assert.deepEqual(new Polynomial(t.p).exp(), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`exp(${t.p}) = ${t.res}`, function () {
+        assert.deepEqual(new Polynomial(t.p).exp(), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Leader coefficient, monomial and term", function () {
-//   for (var i = 0; i < leaderTests.length; i++) {
-//     (function (i) {
-//       var t = leaderTests[i];
+describe("Leader coefficient, monomial and term", function () {
+  for (var i = 0; i < leaderTests.length; i++) {
+    (function (i) {
+      var t = leaderTests[i];
 
-//       it(`p=${t.p} => lc=${t.lc}, lm=${t.lm}, lt=${t.lt}`, function () {
-//         const p = new Polynomial(t.p);
-//         assert.equal(
-//           p.lc() === t.lc && p.lm() === t.lm && p.lt() === t.lt,
-//           true
-//         );
-//       });
-//     })(i);
-//   }
-// });
+      it(`p=${t.p} => lc=${t.lc}, lm=${t.lm}, lt=${t.lt}`, function () {
+        const p = new Polynomial(t.p);
+        assert.equal(
+          p.lc() === t.lc && p.lm() === t.lm && p.lt() === t.lt,
+          true
+        );
+      });
+    })(i);
+  }
+});
 
-// describe("Is zero", function () {
-//   for (var i = 0; i < zeroTests.length; i++) {
-//     (function (i) {
-//       var t = zeroTests[i];
+describe("Is zero", function () {
+  for (var i = 0; i < zeroTests.length; i++) {
+    (function (i) {
+      var t = zeroTests[i];
 
-//       it(`${t.p} ${t.res ? " == " : " != "} 0`, function () {
-//         assert.equal(new Polynomial(t.p).isZero(), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`${t.p} ${t.res ? " == " : " != "} 0`, function () {
+        assert.equal(new Polynomial(t.p).isZero(), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Division", function () {
-//   for (var i = 0; i < divisionTests.length; i++) {
-//     (function (i) {
-//       var t = divisionTests[i];
-//       const f = new Polynomial(t.f);
-//       const fs = t.fs.map((val: string) => new Polynomial(val));
+describe("Division", function () {
+  for (var i = 0; i < divisionTests.length; i++) {
+    (function (i) {
+      var t = divisionTests[i];
+      const f = new Polynomial(t.f);
+      const fs = t.fs.map((val: string) => new Polynomial(val));
 
-//       it(`${t.f} / { ${t.fs} }`, function () {
-//         const res = Polynomial.divide(f, fs, 10);
-//         let mult = new Polynomial("0");
-//         res.quotients.forEach((qi, i) => {
-//           mult = mult.plus(qi.multiply(fs[i]));
-//         });
+      it(`${t.f} / { ${t.fs} }`, function () {
+        const res = f.divide(fs);
+        let mult = new Polynomial("0");
+        res.quotients.forEach((qi, i) => {
+          mult = mult.plus(qi.multiply(fs[i]));
+        });
 
-//         mult = mult.plus(res.remainder);
-//         mult = mult.minus(f);
+        mult = mult.plus(res.remainder);
+        mult = mult.minus(f);
 
-//         if(!mult.isZero()){
-//             console.log("ERROR DIVIDING ", t.f, " BETWEEN ", t.fs);
-//             console.log(res.steps);
-//         }
-//         assert(mult.isZero());
-//       });
-//     })(i);
-//   }
-// });
+        if(!mult.isZero()){
+            console.log("ERROR DIVIDING ", t.f, " BETWEEN ", t.fs);
+            console.log(res.steps);
+        }
+        assert(mult.isZero());
+      });
+    })(i);
+  }
+});
 
-// describe("Support", function () {
-//   for (var i = 0; i < suppTests.length; i++) {
-//     (function (i) {
-//       var t = suppTests[i];
-//       it(`supp(${t.p}) = ${t.res}`, function () {
-//         assert.deepEqual( new Polynomial(t.p).supp(), t.res );
-//       });
-//     })(i);
-//   }
-// });
+describe("Support", function () {
+  for (var i = 0; i < suppTests.length; i++) {
+    (function (i) {
+      var t = suppTests[i];
+      it(`supp(${t.p}) = ${t.res}`, function () {
+        assert.deepEqual( new Polynomial(t.p).supp(), t.res );
+      });
+    })(i);
+  }
+});
 
-// describe("Groebner basis check", function () {
-//   for (var i = 0; i < isGroebnerBasisTests.length; i++) {
-//     (function (i) {
-//       var t = isGroebnerBasisTests[i];
-//       const F = t.ideal.map((val: string) => new Polynomial(val));
-//       const G = t.basis.map((val: string) => new Polynomial(val));
+describe("Groebner basis check", function () {
+  for (var i = 0; i < isGroebnerBasisTests.length; i++) {
+    (function (i) {
+      var t = isGroebnerBasisTests[i];
+      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const G = t.basis.map((val: string) => new Polynomial(val));
 
-//       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
-//         t.ideal
-//       } >`, function () {
-//         assert.equal(Polynomial.isGroebnerBasis(F, G), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
+        t.ideal
+      } >`, function () {
+        assert.equal(Polynomial.isGroebnerBasis(F, G), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Groebner basis reduced check", function () {
-//     for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
-//       (function (i) {
-//         var t = isReducedGroebnerBasisTests[i];
-//         const F = t.ideal.map((val: string) => new Polynomial(val));
-//         const G = t.basis.map((val: string) => new Polynomial(val));
+describe("Groebner basis reduced check", function () {
+    for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
+      (function (i) {
+        var t = isReducedGroebnerBasisTests[i];
+        const F = t.ideal.map((val: string) => new Polynomial(val));
+        const G = t.basis.map((val: string) => new Polynomial(val));
   
-//         it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
-//           t.ideal
-//         } >`, function () {
-//           assert.equal(Polynomial.isReducedGroebnerBasis(F, G), t.res);
-//         });
-//       })(i);
-//     }
-//   });
+        it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
+          t.ideal
+        } >`, function () {
+          assert.equal(Polynomial.isReducedGroebnerBasis(F, G), t.res);
+        });
+      })(i);
+    }
+  });
 
-//   describe("Groebner basis computation", function () {
-//     this.timeout(10000);
+  describe("Groebner basis computation", function () {
+    this.timeout(10000);
 
-//     for (var i = 0; i < groebnerComputeTests.length; i++) {
-//       (function (i) {
-//         var t = groebnerComputeTests[i];
-//         const F = t.ideal.map((val: string) => new Polynomial(val));
+    for (var i = 0; i < groebnerComputeTests.length; i++) {
+      (function (i) {
+        var t = groebnerComputeTests[i];
+        const F = t.ideal.map((val: string) => new Polynomial(val));
   
-//         it(`I= < ${
-//           t.ideal
-//         } >`, function () {
-//           assert.equal(Polynomial.isGroebnerBasis(F, Polynomial.buchberger(F)), true);
-//         });
-//       })(i);
-//     }
-//   });
+        it(`I= < ${
+          t.ideal
+        } >`, function () {
+          assert.equal(Polynomial.isGroebnerBasis(F, Polynomial.buchberger(F)), true);
+        });
+      })(i);
+    }
+  });
 
   // describe("Reduced Groebner basis computation", function () {
   //   this.timeout(10000);
