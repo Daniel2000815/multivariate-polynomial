@@ -1,12 +1,19 @@
 {
   "name": "multivariate-polynomial-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A javascript library to work with rational polynomials in multiple variables.",
   "main": "Polynomial.ts",
   "scripts": {
     "test": "ts-mocha test/*.ts"
   },
-  "keywords": ["polynomial", "multivariate", "math", "algebra", "groebner", "basis"],
+  "keywords": [
+    "polynomial",
+    "multivariate",
+    "math",
+    "algebra",
+    "groebner",
+    "basis"
+  ],
   "homepage": "https://github.com/Daniel2000815/multivariate-polynomial",
   "bugs": {
     "url": "https://github.com/Daniel2000815/multivariate-polynomial/issues"
