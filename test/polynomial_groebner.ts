@@ -1,6 +1,5 @@
 import assert from "assert";
-import Polynomial, { Ideal } from "../Polynomial";
-import Monomial from "../Monomial";
+import {Polynomial} from "../Polynomial";
 
 const isGroebnerBasisTests = [
   {
@@ -231,38 +230,38 @@ describe("Groebner basis computation", function () {
   }
 });
 
-// describe("Reduced Groebner basis computation", function () {
-//     this.timeout(10000);
+describe("Reduced Groebner basis computation", function () {
+    this.timeout(10000);
   
-//     for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
-//       (function (i) {
-//         var t = isReducedGroebnerBasisTests[i];
-//         const F = t.ideal.map((val: string) => new Polynomial(val));
-  
-//         it(`I= < ${
-//           t.ideal
-//         } >`, function () {
-//           assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
-//         });
-//       })(i);
-//     }
-// });
-
-/*
-  describe("Implicitation", function () {
-    for (var i = 0; i < implicitTests.length; i++) {
+    for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
       (function (i) {
-        var t = implicitTests[i];
-        let res = Ideal.implicit(new Polynomial(t.xPar), new Polynomial(t.yPar), new Polynomial(t.zPar));
-        it(`${t.name}`, function () {
-          assert(res.equals(new Polynomial(t.res)));
+        var t = isReducedGroebnerBasisTests[i];
+        const F = t.ideal.map((val: string) => new Polynomial(val));
+  
+        it(`I= < ${
+          t.ideal
+        } >`, function () {
+          assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
         });
       })(i);
     }
+});
+
+
+// describe("Implicitation", function () {
+//   for (var i = 0; i < implicitTests.length; i++) {
+//     (function (i) {
+//       var t = implicitTests[i];
+//       let res = Polynomial.implicitate(new Polynomial(t.xPar), new Polynomial(t.yPar), new Polynomial(t.zPar));
+//       it(`${t.name}`, function () {
+//         assert(res.equals(new Polynomial(t.res)));
+//       });
+//     })(i);
+//   }
+
   
-    
-  });
+// });
   
   
  
-  */
+  

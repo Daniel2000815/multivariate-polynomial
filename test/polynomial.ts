@@ -1,6 +1,6 @@
 import assert from "assert";
-import Polynomial, { Ideal } from "../Polynomial";
-import Monomial from "../Monomial";
+import {Polynomial} from "../Polynomial";
+import {Monomial} from "../Monomial";
 
 // P.<t,x,y,z> = PolynomialRing(QQ,4, order='lex');
 // I = Ideal([x^3*y^2,y^4+z*t,t^4]);
@@ -94,10 +94,10 @@ const expGreaterTests = [
   { e1: [1, 0, 0], e2: [0, 1, 0], res: true },
   { e1: [2, 1, 0], e2: [1, 2, 0], res: true },
   { e1: [0, 2, 0], e2: [0, 0, 0], res: true },
-  { e1: [0, 0, 0, 5], e2: [0, 0, 0], res: false },
+  { e1: [0, 0, 0, 5], e2: [0, 0, 0], res: null },
   { e1: [1, 4, 3], e2: [0, 0, 0], res: true },
-  { e1: [2, 1], e2: [3, 0, 0], res: false },
-  { e1: [1], e2: [0, 0, 0], res: false },
+  { e1: [2, 1], e2: [3, 0, 0], res: null },
+  { e1: [1], e2: [0, 0, 0], res: null },
   { e1: [0, 0, 2], e2: [0, 2, 0], res: false },
   { e1: [4, 1, 0], e2: [0, 0, 9], res: true },
 ];
@@ -222,7 +222,7 @@ describe("Initialization", function () {
         if (t.coeff.length !== p.getMonomials().length) assert(false);
 
         p.getMonomials().forEach((m: Monomial, idx: number) => {
-          if(!m.equals(new Monomial(t.coeff[idx], Float64Array.from(t.exp[idx])), p.getVars())){
+          if(!m.equals(new Monomial(t.coeff[idx], Float64Array.from(t.exp[idx]), p.getVars()))){
             assert(false);
           }
         });
@@ -302,7 +302,10 @@ describe("Exp greater", function () {
 
       
       it(`${t.e1} ${t.res ? ">" : "<="} ${t.e2}`, function () {
-        assert.equal(Polynomial.expGreater(Float64Array.from(t.e1), Float64Array.from(t.e2)), t.res);
+        if(t.res !== null)
+          assert.equal(Polynomial.expGreater(Float64Array.from(t.e1), Float64Array.from(t.e2)), t.res);
+        else
+          assert.throws(() => Polynomial.expGreater(Float64Array.from(t.e1), Float64Array.from(t.e2)));
       });
     })(i);
   }

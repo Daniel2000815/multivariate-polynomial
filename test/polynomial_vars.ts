@@ -1,6 +1,5 @@
 import assert from "assert";
-import Polynomial, { Ideal } from "../Polynomial";
-import { Monomial } from "../Polynomial";
+import {Polynomial} from "../Polynomial";
 
 const polsXY = [
     new Polynomial("2*x*y", ["x","y"]),

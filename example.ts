@@ -1,4 +1,4 @@
-import Polynomial from "./Polynomial";
+import {Polynomial} from "./Polynomial";
 
 let f = new Polynomial("2*x + 1");
 let g = new Polynomial("y*z - x");

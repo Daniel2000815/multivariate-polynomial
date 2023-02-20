@@ -1,97 +1,50 @@
 import nerdamer from "nerdamer-ts";
-import nerdamerjs, { diff, gcd } from "nerdamer";
-import Monomial from "./Monomial";
+import nerdamerjs from "nerdamer";
+import {Monomial} from "./Monomial";
+import {Ideal} from "./Ideal";
 
 require("nerdamer/algebra");
 
-export class Ideal {
-  private generators : Polynomial[];
-
-  constructor(generators: Polynomial[]){
-    this.generators = Polynomial.buchberger(generators);
-  }
-
-  static zero(){
-    return new Polynomial([Monomial.zero()]);
-  }
-
-  static one(){
-    return new Polynomial([Monomial.one()]);
-  }
-
-  multiply(p: Polynomial){
-    const newGens = this.generators.map(f=>f.multiply(p));
-    return new Ideal(newGens);
-  }
-
-  intersect(J: Ideal){
-    const F = this.generators;
-    const G = J.generators;
-
-
-    const p1 = new Polynomial("t");
-    const p2 = new Polynomial("1-t");
-    const H = new Ideal(this.multiply(p1).generators.concat(J.multiply(p2).generators));
-
-    let res : Polynomial[] = [];
-    H.generators.forEach(gen => {
-      if(!gen.hasVariable("t")){
-        res.push(gen);
-      }
-    })
-
-    return res;
-  }
-
-  static implicit(fx: Polynomial, fy: Polynomial, fz: Polynomial){
-    let elimVars : string[] = [];
-    [fx,fy,fz].forEach(f=> elimVars = elimVars.concat(f.usedVars()));
-    elimVars = [...new Set(elimVars)];
-
-    const x = new Polynomial("x");
-    const y = new Polynomial("y");
-    const z = new Polynomial("z");
-
-    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)]);
-    let J : Polynomial[] = [];
-    
-    I.generators.forEach(gen => {
-      if(!gen.hasVariables(elimVars)){
-        J.push(gen);
-      }
-    })
-
-    const intersection = J.find(pol => elimVars.every(v => !pol.usedVars().includes(v)));
-    console.log("INTER: " + intersection?.toString());
-    return intersection !== undefined ? intersection : new Polynomial("0");
-  }
-}
-
-export default class Polynomial {
+/**
+ * Represents a polynomial as a collection of monomials in a specified ring and using the *lex* monomial order
+ */
+export class Polynomial {
+  /**
+   * Monomials forming the polynomial ordered with *lex*
+   */
   private monomials: Monomial[] = [Monomial.zero()];
+  /**
+   * Generators of the ring in R to which the polynomial belongs
+   */
   private vars: string[];
 
-  constructor(arg: string | Monomial[], vars: string[] = ["t", "x", "y", "z"]) {
+  /**
+   * 
+   * @param p string representation of the polynomial or monomial collection that form the polynomial
+   * @param vars Generators of the ring in R to which the polynomial belongs
+   */
+  constructor(p: string | Monomial[], vars: string[] = ["t", "x", "y", "z"]) {
     this.vars = vars;
 
-    if (typeof arg === "string") {
+    if (typeof p === "string") {
       var pol = "";
-      this.monomials = [new Monomial(1, Float64Array.from(this.vars.map(v=>0)), this.vars)];
+      
       
       try {
-        if (arg.length == 0) pol = "0";
-        else pol = nerdamer(arg).expand().toString();
+        if (p.length == 0) pol = "0";
+        else pol = nerdamer(p).expand().toString();
       } catch (e) {
-        throw new Error(`ERROR PARSING POLYNOMIAL ${arg}`);
+        throw new Error(`ERROR PARSING POLYNOMIAL ${p}`);
       }
 
-      this.computeCoefficients(pol, true);
+      this.monomials = [];
+      this.computeCoefficients(pol);
     } else {
-      if(arg.every(m => 
+      if(p.every(m => 
           m.getExp().length === this.vars.length &&
           m.getVars().every((v,idx) => v===this.vars[idx])
         )){
-          this.monomials = arg.length>1 ? arg.filter(m => m.getCoef()!==0) : arg;
+          this.monomials = p.length>1 ? p.filter(m => m.getCoef()!==0) : p;
         }
         else{
           throw new Error("INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS");
@@ -102,16 +55,23 @@ export default class Polynomial {
     this.applyLex();
   }
 
-  applyLex() {
+  /**
+   * Orders `monomials` using *lex*
+   */
+  private applyLex() {
     this.monomials = this.monomials.sort(function (a, b) {
       return Polynomial.expGreater(a.getExp(), b.getExp()) ? -1 : 1;
     });
   }
 
-  computeCoefficients(pol: string, firstIt = false) {
-    if (firstIt) {
-      this.monomials = [];
-    }
+  /**
+   * Parses a string to a Polynomial
+   * @param pol string representation of the polynomial
+   */
+  private computeCoefficients(pol: string) : void {
+    // if (firstIt) {
+    //   this.monomials = [];
+    // }
     if (!pol) return;
     
     const node = nerdamer.tree(pol);
@@ -172,6 +132,10 @@ export default class Polynomial {
     }
   }
 
+  /**
+   * 
+   * @returns Copy of the polynomial
+   */
   clone(): Polynomial {
     let p = new Polynomial("0");
     p.monomials = this.monomials;
@@ -181,12 +145,16 @@ export default class Polynomial {
 
   /**
    *
-   * @returns list of monomials making the array ordered by *lex*
+   * List of monomials making the array ordered by *lex*
    */
   getMonomials() {
     return this.monomials;
   }
 
+  /**
+   * 
+   * Checks if `v` is a variable of the ring of this polynomial
+   */
   hasVariable(v: string){
     const p = new Polynomial(v);
     
@@ -197,25 +165,36 @@ export default class Polynomial {
     );
   }
 
+  /**
+   * 
+   * Checks if all variables in `v` are variables of the ring of this polynomial
+   */
   hasVariables(v: string[]){
     return v.every(vi => this.hasVariable(vi));
   }
 
+  /**
+   * 
+   * List of variables of the ring of this polynomial
+   */
   getVars() : string[] {
     return this.vars;
   }
 
+  /**
+   * 
+   * List of the variables from the ring used by the polynomial
+   */
   usedVars() : string[] {
     let res : string[] = [];
     this.exp().forEach((e,idx) => {if(e>0) res.push(this.vars[idx])});
 
     return res;
   }
-  // === PUBLIC INSTANCE METHODS ===
+
   /**
-   *
-   * @param q polynomial to multiply with
-   * @returns product with the polynomial `q`
+   * Product of this polynomial with `q`
+   * @param q Polynomial or number to multiply with
    */
   multiply(q: Polynomial | number) {
     let product: Monomial[] = [];
@@ -256,9 +235,8 @@ export default class Polynomial {
   }
 
   /**
-   *
-   * @param q polynomial to sum with
-   * @returns sum with the polynomial `q`
+   * Sum of this polynomial with `q`
+   * @param q Polynomial or number to sum with
    */
   plus(q: Polynomial) {
     let intersection = this.monomials.filter((x) =>
@@ -298,9 +276,8 @@ export default class Polynomial {
   }
 
   /**
-   *
-   * @param q polynomial to substract
-   * @returns this polynomial minus `q`
+   * Substraction of this polynomial with `q`
+   * @param q Polynomial or number to substract
    */
   minus(q: Polynomial) {
     return this.plus(q.multiply(-1));
@@ -308,8 +285,7 @@ export default class Polynomial {
 
   /**
    *
-   * @param q Polynomial to compare with considering order
-   * @returns Polynomials are equivalent and with the same order
+   * Checks if polynomials are equivalent
    */
   equals(q: Polynomial) {
     return (
@@ -323,7 +299,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Leader coefficient
+   * Leader coefficient
    */
   lc() {
     return this.monomials[0].getCoef();
@@ -331,7 +307,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Leader monomial
+   * Leader monomial
    */
   lm() {
     return new Monomial(1, this.monomials[0].getExp(), this.vars);
@@ -339,7 +315,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Leader term
+   * Leader term
    */
   lt() {
     return this.monomials[0];
@@ -347,7 +323,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Second leader coefficient
+   * Second leader coefficient
    */
   slc() : number{
     return this.monomials.length > 1 ? this.monomials[1].getCoef() : 0;
@@ -355,7 +331,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Second leader monomial
+   * Second leader monomial
    */
   slm() : Monomial{
     return this.monomials.length > 1 ? new Monomial(1, this.monomials[1].getExp(), this.vars) : new Monomial(1, Float64Array.from(this.monomials[0].getExp().map(v => 0)), this.vars);
@@ -363,7 +339,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Second leader term
+   * Second leader term
    */
   slt() {
     return this.monomials.length > 1  ? this.monomials[1] : new Monomial(1, Float64Array.from(this.monomials[0].getExp().map(v => 0)), this.vars);
@@ -371,8 +347,6 @@ export default class Polynomial {
 
   /**
    * Exponent of this polynomial
-   * @param vars Variables in the ring. Default is t,x,y,z
-   * @return exponent of `p` using *lex*
    */
   exp(): Float64Array {
     return this.monomials[0].getExp();
@@ -380,7 +354,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Support of the polynomial
+   * Support of the polynomial
    */
   supp(): Float64Array[] {
     return this.monomials.map((m: Monomial) => m.getExp());
@@ -388,7 +362,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns Polynomial is zero
+   * Checks if polynomial is equivalent to zero
    */
   isZero(): boolean {
     const n = this.monomials.length;
@@ -433,7 +407,7 @@ export default class Polynomial {
 
       while (i < s && divFound === 0) {
         const exp_fi = fs[i].exp();
-        const gamma = Polynomial.#expMinus(exp_p, exp_fi);
+        const gamma = Polynomial.expMinus(exp_p, exp_fi);
 
         step = [];
 
@@ -508,7 +482,7 @@ export default class Polynomial {
 
   /**
    *
-   * @returns string representation of the polynomial using *lex*
+   * String representation of the polynomial using *lex*
    */
   toString() {
     let res = "";
@@ -527,30 +501,9 @@ export default class Polynomial {
     return res;
   }
 
-
-  // /**
-  //  * Builds a monomial with the given exponent and lc=1
-  //  * @param exp
-  //  * @returns monomial with exponent equal to `exp` and lc=1. If error returns 0
-  //  */
-  // static monomial(exp: number[]) {
-  //   if (exp.length !== this.vars.length) {
-  //     console.error("ERROR: EXPONENT NOT VALID");
-  //     return new Polynomial("0");
-  //   }
-
-  //   let pol = "";
-
-  //   Polynomial.#vars.forEach(function (value, idx) {
-  //     pol += `(${value})^(${exp[idx]})`;
-  //   });
-
-  //   return new Polynomial(pol);
-  // }
-
   /**
    * 
-   * @brief f Checks if `f` and `g` use the same variables
+   * Checks if this polynomial and `p` are in the same ring
    */
   sameVars(p: Polynomial){
     if(this.vars.length !== p.getVars().length)
@@ -561,11 +514,11 @@ export default class Polynomial {
 
   /**
    *
-   * @returns a>b using lex. If error, returns false
+   * Chacks if a>b using lex.
    */
   static expGreater(a: Float64Array, b: Float64Array) {
     if (a.length !== b.length) {
-      return false;
+      throw new Error("TRYING TO COMPARE EXPONENTS OF DIFFERENT SIZE");
     }
 
     for (let i = 0; i < a.length; i++) {
@@ -580,27 +533,30 @@ export default class Polynomial {
 
   /**
    * 
-   * @returns `a`-`b`
+   * `a`-`b`
    */
-  static #expMinus(a: Float64Array, b: Float64Array) {
+  private static expMinus(a: Float64Array, b: Float64Array) {
     if (a.length !== b.length) return Float64Array.from([]);
 
     return a.map((val, idx) => val - b[idx]);
   }
 
-  static #arrayCombinations(array: Polynomial[]) {
+  /**
+   * 
+   * All possible pairs of combinations of `array`
+   */
+  private static arrayCombinations(array: Polynomial[]) {
     var result = array.flatMap((v, i) => array.slice(i + 1).map((w) => [v, w]));
     return result;
   }
 
   /**
-   *
+   * Checks if `G` is a Groebner basis of <`F`>
    * @param F Generator of the ideal I = <F>
    * @param G Supposed Groebner basis
-   * @return `G` is a Groebner basis of <`F`>
    */
   static isGroebnerBasis(F: Polynomial[], G: Polynomial[]) {
-    const fgPairs = this.#arrayCombinations(F);
+    const fgPairs = this.arrayCombinations(F);
 
     for (let i = 0; i < fgPairs.length; i++) {
       const r = this.sPol(fgPairs[i][0], fgPairs[i][1]).divide(G).remainder;
@@ -614,19 +570,16 @@ export default class Polynomial {
   }
 
   /**
-   *
-   * @param F
-   * @returns array of exponents of each polynomial in `F`
+   * Array of exponents of each polynomial in `F`
    */
   static exp(F: Polynomial[]) {
     return F.map((f: Polynomial) => f.exp());
   }
 
   /**
-   *
+   * Checks if `G` is a reduced Groebner basis of <`F`>
    * @param F Generator of the ideal I = <F>
    * @param G Supposed Groebner basis
-   * @return `G` is a reduced Groebner basis of <`F`>
    */
   static isReducedGroebnerBasis(F: Polynomial[], G: Polynomial[]) {
     let res = true;
@@ -634,15 +587,16 @@ export default class Polynomial {
 
     for (let i = 0; i < G.length && res; i++) {
       const g = G[i];
-      const newG = G.filter((p) => !p.equals(g));
       const suppG = g.supp();
+
+      const newG = G.filter((p) => !p.equals(g));
       const expNewG = Polynomial.exp(newG);
 
       if (g.lc() !== 1) res = false;
 
       for (let j = 0; j < suppG.length && res; j++) {
         for (let k = 0; k < expNewG.length && res; k++) {
-          if (!this.#expMinus(suppG[j], expNewG[k]).some((item) => item < 0))
+          if (!this.expMinus(suppG[j], expNewG[k]).some((item) => item < 0))
             res = false;
         }
       }
@@ -653,32 +607,28 @@ export default class Polynomial {
 
   /**
    *
-   * @param alfa in N^n
-   * @param beta in N^n
-   * @returns lcm(alfa,beta) = ( max(alfa_1,beta_1), ··· , max(alfa_n, beta_n) )
+   * Lowest common multiple of this polynomial and `g`
    */
-  static lcm(f: Polynomial, g: Polynomial) : Monomial {
-    if (!f.sameVars(g)) {
+  lcm(g: Polynomial) : Monomial {
+    if (!this.sameVars(g)) {
       throw new Error("CAN NOT COMPUTE LCM OF TWO POLYNOMIALS WOTH DIFFERENT VARIABLES");
     }
 
     let res: number[] = [];
 
-    for (let i = 0; i < f.exp().length; i++) {
-      res.push(Math.max(f.exp()[i], g.exp()[i]));
+    for (let i = 0; i < this.exp().length; i++) {
+      res.push(Math.max(this.exp()[i], g.exp()[i]));
     }
 
-    return new Monomial(1, Float64Array.from(res), f.vars);
+    return new Monomial(1, Float64Array.from(res), this.vars);
   }
 
   /**
    *
-   * @param alfa in N^n
-   * @param beta in N^n
-   * @returns gcd(α,β) = ( min(α_1,β_1), ··· , min(α_n, β_n) )
+   * Greatest common divider of this polynomial and `g`
    */
-    static gcd(f: Polynomial, g: Polynomial) : Monomial {
-      return f.lm().gcd(g.lm());
+    gcd(g: Polynomial) : Monomial {
+      return this.lm().gcd(g.lm());
     }
 
   /**
@@ -688,61 +638,22 @@ export default class Polynomial {
   static sPol(f: Polynomial, g: Polynomial) {
     const alpha = f.exp();
     const beta = g.exp();
-    const gamma = this.lcm(f, g).getExp();
+    const gamma = f.lcm(g).getExp();
 
-    return new Monomial(1, this.#expMinus(gamma, alpha), f.getVars())
+    return new Monomial(1, this.expMinus(gamma, alpha), f.getVars())
       .toPolynomial()
       .multiply(f)
       .minus(
-        new Monomial(1, this.#expMinus(gamma, beta), f.getVars()).toPolynomial().multiply(g)
+        new Monomial(1, this.expMinus(gamma, beta), f.getVars()).toPolynomial().multiply(g)
       );
   }
 
   /**
-   *
+   * Computes a Groebner base of I using Buchberger's Algorithm
    * @param F Generator of the ideal I = <F>
    * @param maxIter maximum iterations
-   * @returns Groebner basis of I
    */
-  static buchberger(F: Polynomial[], maxIter: number = 10000) {
-    let currIt = 0;
-    let G = F;
-    let added;
-
-    do {
-      currIt++;
-      let newG = Array.from(G);
-      const fgPairs = this.#arrayCombinations(newG);
-
-      added = false;
-
-      for (let i = 0; i < fgPairs.length && !added; i++) {
-        const r = this.sPol(fgPairs[i][0], fgPairs[i][1]).divide(
-          newG
-        ).remainder;
-
-        if (!r.isZero()) {
-          G.push(r);
-          added = true;
-        }
-      }
-    } while (added && currIt < maxIter);
-
-    if (!this.isGroebnerBasis(F, G)) {
-      console.error(`ERROR COMPUTING GROEBNER BASIS OF ${F}`);
-      return [new Polynomial("0")];
-    }
-
-    return G;
-  }
-
-    /**
-   *
-   * @param F Generator of the ideal I = <F>
-   * @param maxIter maximum iterations
-   * @returns Groebner reduced base of I
-   */
-    static buchbergerReduced(F: Polynomial[], maxIter: number = 1000) {
+    static buchberger(F: Polynomial[], maxIter: number = 1000) {
       let currIt = 0;
       let G = F;
       let added;
@@ -753,7 +664,7 @@ export default class Polynomial {
         added = false;
   
         let newG = Array.from(G);
-        const fgPairs = this.#arrayCombinations(newG);
+        const fgPairs = this.arrayCombinations(newG);
   
         for (let i = 0; i < fgPairs.length && !added; i++) {
           const f = fgPairs[i][0];
@@ -770,22 +681,54 @@ export default class Polynomial {
             }
           }
           else{
-            console.log(`CRT1: ${!this.criterion1(f, g)}\tCRT2: ${!this.criterion2(f,g,newG)}\tCRT3: ${!this.criterion3(f, g, newG)}`)
             opAhorradas++;
           }
         }
       } while (added && currIt < maxIter);
   
-      if(!this.isReducedGroebnerBasis(F,G))
-        console.error(`ERROR COMPUTING REDUCED GROEBNER BASE OF ${F}`);
-  
-        console.log("ITERACION AHORRADA: ", opAhorradas);
       return G;
     }
+
+    /**
+   * Computes a reduced Groebner base of I using Buchberger's Algorithm and Criteria
+   * @param F Generator of the ideal $I = <F>$
+   * @param maxIter maximum iterations
+   */
+    static buchbergerReduced(F: Polynomial[], maxIter: number = 1000) {
+      return this.reduce(this.buchberger(F, maxIter));
+    }
+
+    /**
+     * Reduces a Groebner base
+     * @param G base to reduce
+     */
+    static reduce(G: Polynomial[]) : Polynomial[]{
+      let res : Polynomial[] = [];
+      
+      G = G.map(g => g.multiply(1/g.lc()));
+
+      for(let i=0; i<G.length; i++){
+        let g = G[i];
+        let div = g.divide(G.filter(e => !e.equals(g)));
+
+        if(!div.remainder.isZero()){
+          G[i] = div.remainder;
+          res.push(div.remainder);
+        }
+
+      }
+      // G.forEach(g => {
+      //   const div = g.divide(G.filter(e => !e.equals(g)));
+      //   if(!div.remainder.isZero())
+      //     res.push(div.remainder);
+          
+      // });      
+      return res;
+    }
   
-    static criterion1(f: Polynomial, g: Polynomial): boolean {
+    private static criterion1(f: Polynomial, g: Polynomial): boolean {
       let res = true;
-      const lcmFG = this.lcm(f, g);
+      const lcmFG = f.lcm(g);
   
       const expF = f.exp();
       const expG = g.exp();
@@ -815,15 +758,15 @@ export default class Polynomial {
       return res;
     }
   
-    static criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
+    private static criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
       // return false;
   
-      const a = this.lcm(gi, gj);
+      const a = gi.lcm(gj);
       const startIndex = Math.max(G.indexOf(gi), G.indexOf(gj)) + 1;
       let res = false;
   
       for(let i=startIndex; i<G.length && !res; i++){
-        if(this.#expIsMultiple(a.getExp(), G[i].exp())){
+        if(this.expIsMultiple(a.getExp(), G[i].exp())){
           res = true;
         }
       }
@@ -834,7 +777,7 @@ export default class Polynomial {
     /**
      * 
      */
-    static criterion3(f: Polynomial, g: Polynomial, G: Polynomial[]) : boolean {
+    private static criterion3(f: Polynomial, g: Polynomial, G: Polynomial[]) : boolean {
       let res = false;
       const startIndex = Math.max(G.indexOf(f), G.indexOf(g)) + 1;
 
@@ -844,7 +787,7 @@ export default class Polynomial {
         const sPolfh = Polynomial.sPol(f, h);
         const sPolgh = Polynomial.sPol(g, h);
 
-        if(!h.lm().divides(Polynomial.lcm(f,g))){
+        if(!h.lm().divides(f.lcm(g))){
           continue;
         }
         if(sPolfh.reduces(G) || sPolgh.reduces(G)){
@@ -854,7 +797,7 @@ export default class Polynomial {
           const lmF = f.lm();
           const lmG = g.lm();
           const lmH = h.lm();
-          const gdcFG = Polynomial.gcd(f,g);
+          const gdcFG = f.gcd(g);
 
           const cond1 = lmH.divides(lmF.divide(gdcFG)) && !g.slm().multiply(h.lm()).equals(h.slm().multiply(g.lm()));
           const cond2 = lmH.divides(lmG.divide(gdcFG)) && !f.slm().multiply(h.lm()).equals(h.slm().multiply(f.lm()));
@@ -868,28 +811,15 @@ export default class Polynomial {
     }
 
   /**
-   * Checks if a is an integer multiple of b
+   * Checks if `a` is an integer multiple of `b`
    */
-  static #expIsMultiple(a: Float64Array, b: Float64Array) {
+  private static expIsMultiple(a: Float64Array, b: Float64Array) {
     if (a.length !== b.length) return false;
-
-    // let res = true;
-    // let mult = Math.round(a[0] / b[0]);
-
-    // a.forEach((val, idx) => {
-    //   if (b[idx] * mult !== val) {
-    //     res = false;
-    //     return;
-    //   }
-    // });
-
-    // return res;
 
     return a.every((val, idx) => val <= b[idx]);
   }
 
-  // === PRIVATE INSTANCE METHODS ===
-  strContainsChar(str: string, chars: string[]) {
+  private strContainsChar(str: string, chars: string[]) {
     for (let i = 0; i < str.length; i++) {
       if (chars.includes(str[i])) return true;
     }
@@ -897,7 +827,7 @@ export default class Polynomial {
     return false;
   }
 
-  nodeToString(node: any): string {
+  private nodeToString(node: any): string {
     // console.log(node);
     if (node !== null && node !== undefined) {
       if (node.type === "VARIABLE_OR_LITERAL") {
@@ -948,5 +878,28 @@ export default class Polynomial {
     }
 
     return "";
+  }
+
+  static implicitate(fx: Polynomial, fy: Polynomial, fz: Polynomial){
+    let elimVars : string[] = [];
+    [fx,fy,fz].forEach(f=> elimVars = elimVars.concat(f.usedVars()));
+    elimVars = [...new Set(elimVars)];
+
+    const x = new Polynomial("x");
+    const y = new Polynomial("y");
+    const z = new Polynomial("z");
+
+    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)]);
+    let J : Polynomial[] = [];
+    
+    I.getGenerators().forEach(gen => {
+      if(!gen.hasVariables(elimVars)){
+        J.push(gen);
+      }
+    })
+
+    const intersection = J.find(pol => elimVars.every(v => !pol.usedVars().includes(v)));
+    console.log("INTER: " + intersection?.toString());
+    return intersection !== undefined ? intersection : new Polynomial("0");
   }
 }

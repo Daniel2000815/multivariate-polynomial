@@ -1,5 +1,5 @@
 import assert from "assert";
-import Monomial from "../Monomial";
+import {Monomial} from "../Monomial";
 
 const zero = new Monomial(0, Float64Array.from([0,0,0,0]), ["t","x","y","z"]);
 const one = new Monomial(1, Float64Array.from([0,0,0,0]), ["t","x","y","z"]);
