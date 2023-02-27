@@ -47,7 +47,9 @@ export class Polynomial {
           this.monomials = p.length>1 ? p.filter(m => m.getCoef()!==0) : p;
         }
         else{
-          throw new Error("INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS");
+          p.forEach(m =>console.log(m.getExp()));
+          p.forEach(m =>console.log(m.getVars()));
+          throw new Error(`INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS: Ring vars: ${this.vars}; Pol. vars: ${p[0].getVars()}`);
         }
     }
 
@@ -137,10 +139,7 @@ export class Polynomial {
    * @returns Copy of the polynomial
    */
   clone(): Polynomial {
-    let p = new Polynomial("0");
-    p.monomials = this.monomials;
-
-    return p;
+    return new Polynomial(this.monomials, this.vars);
   }
 
   /**
@@ -156,13 +155,7 @@ export class Polynomial {
    * Checks if `v` is a variable of the ring of this polynomial
    */
   hasVariable(v: string){
-    const p = new Polynomial(v);
-    
-    const idx = p.exp().findIndex(val=>val>0);
-
-    return this.monomials.some(m=>
-      m.getExp()[idx] > 0
-    );
+    return this.vars.includes(v);
   }
 
   /**
@@ -175,10 +168,62 @@ export class Polynomial {
 
   /**
    * 
+   * Checks if all variables in `v` are used in this polynomial
+   */
+  useAllVariables(v: string[]){
+    return v.length===this.vars.length && v.every((val,idx) => this.monomials.some(m => m.getExp()[idx] > 0));
+  }
+
+  /**
+   * 
+   * Checks if any variables in `v` are used in this polynomial
+   */
+  useAnyVariables(v: string[]){
+    return v.some((val,idx) => this.monomials.some(m => m.getExp()[idx] > 0));
+  }
+
+  /**
+   * 
    * List of variables of the ring of this polynomial
    */
   getVars() : string[] {
     return this.vars;
+  }
+
+  /**
+     * Concatenates new variables to the ring and updates the exponent for every monomial
+     * @param newVars variables to add
+     */
+  pushVariables(newVars: string[]){
+    newVars = [...new Set(newVars)];
+      const varsToAdd = newVars.filter(v => !this.vars.includes(v));
+      
+      this.vars = this.vars.concat(varsToAdd);
+      this.monomials.forEach(m => m.pushVariables(varsToAdd));
+  }
+
+  /**
+   * Inserts new variables before the existing ones to the ring and updates the exponent for every monomial
+   * @param newVars variables to add
+   */
+  insertVariables(newVars: string[]){
+    newVars = [...new Set(newVars)];
+      const varsToAdd = newVars.filter(v => !this.vars.includes(v));
+      
+      this.vars = varsToAdd.concat(this.vars);
+      this.monomials.forEach(m => m.insertVariables(varsToAdd));
+  }
+
+  /**
+     * Remove variables of the ring and updates the exponent for every monomial
+     * @param oldVars variables to remove
+     */
+  removeVariables(oldVars : string[]){
+    oldVars = [...new Set(oldVars)];
+    const varsToRemove = oldVars.filter(v => this.vars.includes(v));
+
+    this.vars = this.vars.filter(v => !varsToRemove.includes(v));;
+    this.monomials.forEach(m => m.removeVariables(varsToRemove));
   }
 
   /**
@@ -395,8 +440,8 @@ export class Polynomial {
     const s = fs.length;
 
     let p = this.clone();
-    let r = new Polynomial("0");
-    let coefs: Polynomial[] = Array(s).fill(new Polynomial("0"));
+    let r = new Polynomial("0", this.vars);
+    let coefs: Polynomial[] = Array(s).fill(new Polynomial("0", this.vars));
 
     while (!p.isZero() && currIt < maxIter) {
       nSteps++;
@@ -416,7 +461,7 @@ export class Polynomial {
           const lcp = p.lc();
           const lcfi = fs[i].lc();
 
-          const coef = new Polynomial([xGamma.multiply(lcp / lcfi)]);
+          const coef = new Polynomial([xGamma.multiply(lcp / lcfi)], this.vars);
 
           let newQi = coefs[i].plus(coef);
           let newP = p.minus(fs[i].multiply(coef));
@@ -439,7 +484,7 @@ export class Polynomial {
       if (divFound === 0) {
         const LC = p.lc();
         const MON = new Monomial(1, exp_p, this.vars);
-        const lt = new Polynomial([MON.multiply(LC)]);
+        const lt = new Polynomial([MON.multiply(LC)], this.vars);
 
         const newR = r.plus(lt);
         const newP = p.minus(lt);
@@ -458,7 +503,7 @@ export class Polynomial {
 
     step = [];
 
-    let mult = new Polynomial("0");
+    let mult = new Polynomial("0", this.vars);
     step.push(`r = ${r}`);
     coefs.forEach((qi, i) => {
       step.push(`q_${i} = ${qi}`);
@@ -640,6 +685,9 @@ export class Polynomial {
     const beta = g.exp();
     const gamma = f.lcm(g).getExp();
 
+    if(!f.sameVars(g))
+      throw new Error("COMPUTING S-POL OF POLYNOMIALS IN DIFFERENT RINGS");
+
     return new Monomial(1, this.expMinus(gamma, alpha), f.getVars())
       .toPolynomial()
       .multiply(f)
@@ -717,12 +765,7 @@ export class Polynomial {
         }
 
       }
-      // G.forEach(g => {
-      //   const div = g.divide(G.filter(e => !e.equals(g)));
-      //   if(!div.remainder.isZero())
-      //     res.push(div.remainder);
-          
-      // });      
+ 
       return res;
     }
   
@@ -880,26 +923,45 @@ export class Polynomial {
     return "";
   }
 
-  static implicitate(fx: Polynomial, fy: Polynomial, fz: Polynomial){
-    let elimVars : string[] = [];
-    [fx,fy,fz].forEach(f=> elimVars = elimVars.concat(f.usedVars()));
-    elimVars = [...new Set(elimVars)];
+  /**
+   * Computes the implicit equation of a variety given the parametrizations of each variable in R3
+   * @param fx Parametrization for x
+   * @param fy Parametrization for y
+   * @param fz Parametrization for z
+   * @returns Generator of the smallest variety containing the image of (`fx`,`fy`,`fz`)
+   */
+  static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial){
+    if(!fx.sameVars(fy) || !fx.sameVars(fz))
+      throw new Error("PARAMETRIZATIONS IN DIFFERENT RINGS")
 
-    const x = new Polynomial("x");
-    const y = new Polynomial("y");
-    const z = new Polynomial("z");
+      const elimVars = fx.getVars();
+
+    if(elimVars.some(v => ["x","y","z"].includes(v)))
+      throw new Error("PARAMETRIZATIONS CAN'T USE X,Y,Z VARIABLES");
+
+    const resVars = ["x","y","z"];
+    const impVars = elimVars.concat(resVars);
+
+
+    const x = new Polynomial("x", impVars);
+    const y = new Polynomial("y",impVars);
+    const z = new Polynomial("z",impVars);
+    fx.pushVariables(resVars);
+    fy.pushVariables(resVars);
+    fz.pushVariables(resVars);
 
     const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)]);
     let J : Polynomial[] = [];
     
     I.getGenerators().forEach(gen => {
-      if(!gen.hasVariables(elimVars)){
+      if(!gen.useAnyVariables(elimVars)){
         J.push(gen);
       }
     })
 
-    const intersection = J.find(pol => elimVars.every(v => !pol.usedVars().includes(v)));
-    console.log("INTER: " + intersection?.toString());
-    return intersection !== undefined ? intersection : new Polynomial("0");
+    const intersection = J[0];
+    intersection.removeVariables(elimVars);
+
+    return intersection !== undefined ? intersection : new Polynomial("0", resVars);
   }
 }

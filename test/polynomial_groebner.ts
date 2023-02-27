@@ -169,7 +169,7 @@ const implicitTests = [
     xPar: "5*t^2 + 2*s^2 - 10",
     yPar: "t",
     zPar: "s",
-    res: "0.5x - 2.5*y^2 - z^2 + 5",
+    res: "x - 5*y^2 - 2*z^2 + 10",
   },
   {
     name: "Hiperbolic Paraboloid",
@@ -248,19 +248,23 @@ describe("Reduced Groebner basis computation", function () {
 });
 
 
-// describe("Implicitation", function () {
-//   for (var i = 0; i < implicitTests.length; i++) {
-//     (function (i) {
-//       var t = implicitTests[i];
-//       let res = Polynomial.implicitate(new Polynomial(t.xPar), new Polynomial(t.yPar), new Polynomial(t.zPar));
-//       it(`${t.name}`, function () {
-//         assert(res.equals(new Polynomial(t.res)));
-//       });
-//     })(i);
-//   }
+describe("Implicitation", function () {
+  for (var i = 0; i < implicitTests.length; i++) {
+    (function (i) {
+      var t = implicitTests[i];
+      const vars = ["s","t"];
+
+      let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
+      it(`${t.name}`, function () {
+        console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
+        console.log("RES:", res.toString());
+        assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
+      });
+    })(i);
+  }
 
   
-// });
+});
   
   
  

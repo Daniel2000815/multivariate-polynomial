@@ -25,6 +25,44 @@ export class Monomial {
     }
   
     /**
+     * Push new variables to the ring and updates the exponent
+     * @param newVars variables to add
+     */
+    pushVariables(newVars : string[]){
+      newVars = [...new Set(newVars)];
+      const varsToAdd = newVars.filter(v => !this.vars.includes(v));
+
+      this.vars = this.vars.concat(varsToAdd);
+      this.exp = Float64Array.from(Array.from(this.exp).concat(varsToAdd.map(v=>0)));
+    }
+
+    /**
+     * Insert new variables before the existing ones to the ring and updates the exponent
+     * @param newVars variables to add
+     */
+    insertVariables(newVars : string[]){
+      newVars = [...new Set(newVars)];
+      const varsToAdd = newVars.filter(v => !this.vars.includes(v));
+
+      this.vars = varsToAdd.concat(this.vars);
+      this.exp = Float64Array.from(varsToAdd.map(v=>0).concat(Array.from(this.exp)));
+    }
+
+    /**
+     * Remove variables of the ring and updates the exponent
+     * @param oldVars variables to remove
+     */
+    removeVariables(oldVars : string[]){
+      oldVars = [...new Set(oldVars)];
+      const varsToRemove = oldVars.filter(v => this.vars.includes(v));
+
+      let newVars = this.vars.filter(v => !varsToRemove.includes(v));
+      let newExp = this.exp.filter((e,idx) => !varsToRemove.includes(this.vars[idx]));
+      this.vars = newVars;
+      this.exp = newExp;
+    }
+
+    /**
      * @brief Monomial 0 in <t,x,y,z>
      */
     static zero(): Monomial {
@@ -278,7 +316,7 @@ export class Monomial {
      * Converts to a polynomial conformed by this monomial
      */
     toPolynomial() {
-      return new Polynomial([this]);
+      return new Polynomial([this], this.vars);
     }
   
     /**

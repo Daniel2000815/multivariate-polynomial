@@ -37,6 +37,14 @@ const sameVarsTest = [
   {i: 4, j: 5, res: false},
 ];
 
+const addVarsTest = [
+  {old: ["x","y"], added: ["z"]},
+  {old: ["x","y","z"], added: ["z"]},
+  {old: ["x","y","z"], added: ["t"]},
+  {old: ["t","y"], added: ["x"]},
+  {old: ["x"], added: ["y","y","z"]},
+]
+
 const stringTest = [
   {i:0, res: "x^2y^3z"},
   {i:2, res: "3txy^2"},
@@ -92,6 +100,45 @@ describe("Same vars", function () {
 
       it(`${testMonomials[t.i].getVars()} ${t.res ? "=" : "!="} ${testMonomials[t.j].getVars()}`, function () {
         assert.equal(testMonomials[t.i].sameVars(testMonomials[t.j]), t.res);
+      });
+    })(i);
+  }
+});
+
+describe("Add vars", function () {
+  for (var i = 0; i < addVarsTest.length; i++) {
+    (function (i) {
+      var t = addVarsTest[i];
+
+      const pushRes = [...new Set(t.old.concat(t.added))];
+      
+      let insertRes: string[] = [];
+      [...new Set(t.added)].forEach(a => {if(!t.old.includes(a)){insertRes.push(a)}});
+      insertRes = insertRes.concat(t.old);
+
+      const varsToRemove = [... new Set(t.added)].filter(v => t.old.includes(v));
+
+      const removeRes = t.old.filter(v => !varsToRemove.includes(v));
+
+      it(`Old: ${t.old}, Vars: ${t.added} => PUSHED: ${pushRes}`, function () {
+        let m =new Monomial(1, Float64Array.from(t.old.map(v=>0)), t.old);
+
+        m.pushVariables(t.added);
+        assert.deepEqual(m.getVars(), pushRes);
+      });
+
+      it(`Old: ${t.old}, Vars: ${t.added} => INSERTED: ${insertRes }`, function () {
+        let m =new Monomial(1, Float64Array.from(t.old.map(v=>0)), t.old);
+
+        m.insertVariables(t.added);
+        assert.deepEqual(m.getVars(),insertRes);
+      });
+
+      it(`Old: ${t.old}, Vars: ${t.added} => REMOVED: ${removeRes }`, function () {
+        let m =new Monomial(1, Float64Array.from(t.old.map(v=>0)), t.old);
+
+        m.removeVariables(t.added);
+        assert.deepEqual(m.getVars(),removeRes);
       });
     })(i);
   }
