@@ -659,13 +659,9 @@ export class Polynomial {
       throw new Error("CAN NOT COMPUTE LCM OF TWO POLYNOMIALS WOTH DIFFERENT VARIABLES");
     }
 
-    let res: number[] = [];
+    const newExp = this.exp().map((e,i) => Math.max(e, g.exp()[i]));
 
-    for (let i = 0; i < this.exp().length; i++) {
-      res.push(Math.max(this.exp()[i], g.exp()[i]));
-    }
-
-    return new Monomial(1, Float64Array.from(res), this.vars);
+    return new Monomial(1, Float64Array.from(newExp), this.vars);
   }
 
   /**

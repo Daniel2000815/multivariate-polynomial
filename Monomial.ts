@@ -174,13 +174,9 @@ export class Monomial {
         throw new Error("CAN NOT DETERMINE GCD OF MONOMIALS USING DIFFERENT VARIABLES");
       }
   
-      let res: number[] = [];
+      const newExp = this.exp.map((e,i) => Math.min(e, m.exp[i]));
   
-      for (let i = 0; i < this.exp.length; i++) {
-        res.push(Math.min(this.exp[i], m.exp[i]));
-      }
-  
-      return new Monomial(1, Float64Array.from(res), this.vars);
+      return new Monomial(1, Float64Array.from(newExp), this.vars);
     }
 
     /**
@@ -192,13 +188,9 @@ export class Monomial {
             throw new Error("CAN NOT DETERMINE LCM OF MONOMIALS USING DIFFERENT VARIABLES");
           }
       
-          let res: number[] = [];
+          const newExp = this.exp.map((e,i) => Math.max(e, m.exp[i]));
       
-          for (let i = 0; i < this.exp.length; i++) {
-            res.push(Math.max(this.exp[i], m.exp[i]));
-          }
-      
-          return new Monomial(1, Float64Array.from(res), this.vars);
+          return new Monomial(1, Float64Array.from(newExp), this.vars);
     }
   
     /**
