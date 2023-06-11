@@ -23,10 +23,6 @@ Polynomial.exp(division.quotients); // [ [ 0, 1, 0, 0 ], [ 0, 0, 0, 0 ] ]
 Polynomial.buchberger([f, g]); // [-2x^2  + 2x*y*z  - x + y*z - 1, -x + y*z, -1/2]
 ```
 
-## Documentation
-
-See [./docs/index.html](./docs/index.html).
-
 ## Running Tests
 
 You can run tests with the following commands.
