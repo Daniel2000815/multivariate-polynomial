@@ -1,4 +1,8 @@
 import {Polynomial} from "./Polynomial";
+import nerdamer from "nerdamer-ts";
+import nerdamerjs from "nerdamer";
+import {Monomial} from "./Monomial";
+import {Ideal} from "./Ideal";
 
 let f = new Polynomial("2*x + 1");
 let g = new Polynomial("y*z - x");

@@ -66,6 +66,26 @@ export class Polynomial {
     });
   }
 
+  // private applyDegRevLex(){
+  //   this.monomials = this.monomials.sort(function (a, b) {
+  //     const expA = a.getExp();
+  //     const expB = b.getExp();
+  //     const degA : number = expA.reduce((x,y)=>x+y);
+  //     const degB : number = expB.reduce((x,y)=>x+y);
+      
+  //     if(degA === degB)
+  //       return -1;
+      
+  //     for(let i=expA.length-1; i>=0; i--){
+  //       if(expA[i] < expB[i])
+  //         return 1;
+  //     }
+
+  //     return -1;
+
+  //   });
+  // }
+
   /**
    * Parses a string to a Polynomial
    * @param pol string representation of the polynomial
@@ -529,7 +549,7 @@ export class Polynomial {
    *
    * String representation of the polynomial using *lex*
    */
-  toString() {
+  toString(showProductChar : boolean = false) {
     let res = "";
 
     for (var i = 0; i < this.monomials.length; i++) {
@@ -538,7 +558,7 @@ export class Polynomial {
 
       res += `${i > 0 ? " " : ""}${
         !["+", "-"].includes(monSt[0]) && i > 0 ? "+ " : ""
-      }${mon.toString()}`;
+      }${mon.toString(showProductChar)}`;
 
       if (i < this.monomials.length - 1 && this.monomials.length > 1) res += "";
     }
@@ -926,37 +946,47 @@ export class Polynomial {
    * @param fz Parametrization for z
    * @returns Generator of the smallest variety containing the image of (`fx`,`fy`,`fz`)
    */
-  static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial){
+  static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial, parameters: string[] = []){
     if(!fx.sameVars(fy) || !fx.sameVars(fz))
       throw new Error("PARAMETRIZATIONS IN DIFFERENT RINGS")
 
-      const elimVars = fx.getVars();
+      const elimVars = fx.getVars().filter(v => !parameters.includes(v));
 
+      console.log("VARS: " + elimVars);
     if(elimVars.some(v => ["x","y","z"].includes(v)))
       throw new Error("PARAMETRIZATIONS CAN'T USE X,Y,Z VARIABLES");
 
-    const resVars = ["x","y","z"];
+    const resVars = parameters.concat(["x","y","z"]);
     const impVars = elimVars.concat(resVars);
 
 
+    console.log("TEST1");
     const x = new Polynomial("x", impVars);
     const y = new Polynomial("y",impVars);
     const z = new Polynomial("z",impVars);
+    console.log("TEST2");
     fx.pushVariables(resVars);
     fy.pushVariables(resVars);
     fz.pushVariables(resVars);
+    
 
-    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)]);
+    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)].concat());
     let J : Polynomial[] = [];
     
     I.getGenerators().forEach(gen => {
+      console.log("TEST: " + gen);
       if(!gen.useAnyVariables(elimVars)){
+        console.log("AÑADO " + gen);
         J.push(gen);
       }
     })
 
+    console.log("PARAM: " + J);
     const intersection = J[0];
+
+    console.log("removing");
     intersection.removeVariables(elimVars);
+    console.log("end remov", intersection.toString());
 
     return intersection !== undefined ? intersection : new Polynomial("0", resVars);
   }

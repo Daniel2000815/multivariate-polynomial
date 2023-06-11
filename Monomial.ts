@@ -315,13 +315,13 @@ export class Monomial {
      * 
      * String representation of this monomial
      */
-    toString() {
+    toString(showProductChar : boolean = false) {
       if (this.isZero()) return "0";
       if (this.isOne()) return "1";
       let mon: string = "";
   
-      if (this.coef === -1) mon = "-";
-      else if (this.coef === 1) mon = "";
+      if (this.coef === -1 && this.exp.some(e=>e!==0)) mon = "-";
+      else if (this.coef === 1 && !this.exp.every(e=>e===0)) mon = "";
       else mon = this.coef.toString();
   
       // Separar - del coeficiente
@@ -329,7 +329,11 @@ export class Monomial {
   
       this.vars.forEach((v, idx) => {
         const e = this.exp[idx];
-        if (this.exp[idx] !== 0) mon += `${v}${e > 1 ? `^${this.exp[idx]}` : ""}`;
+        let added = 0;
+        if (this.exp[idx] !== 0){
+           mon += `${v}${e !== 0 && e!==1 ? `^${this.exp[idx]}` : ""}${added>0 && idx<this.vars.length-1 && showProductChar ? "*":""}`;
+           added++;
+        }
       });
   
       return mon;

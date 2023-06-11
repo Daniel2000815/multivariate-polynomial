@@ -44,6 +44,7 @@ const eqTest = [
 ];
 
 const initTests = [
+  { p: "1/x", coeff: [1], exp:[[0,-1,0,0]]},
   { p: "2x",       coeff: [2],      exp: [[0, 1, 0, 0]] },
   { p: "2x-3x",    coeff: [-1],     exp: [[0, 1, 0, 0]] },
   { p: "x+y",      coeff: [1,1],    exp: [[0, 1, 0, 0], [0,0,1,0]] },
@@ -57,6 +58,10 @@ const initTests = [
 ];
 
 const stringTests = [
+  { p: "x-1", res: "x - 1"},
+  { p: "-x-1", res: "- x - 1"},
+  { p: "y+1", res: "y + 1"},
+  { p: "x*y -1 -2", res: "xy - 3"},
   { p: "2x", res: "2x" },
   { p: "5z-6z+z", res: "0" },
   { p: "x*y^2 - x^2*y +7z", res: "- x^2y + xy^2 + 7z" },
@@ -65,6 +70,9 @@ const stringTests = [
   { p: "x*z-y*x", res: "- xy + xz" },
   { p: "-x^3+7*y*z", res: "- x^3 + 7yz" },
   { p: "x-3y", res: "x - 3y" },
+  { p: "1/x", res: "x^-1"},
+  { p: "1/y^2", res: "y^-2"},
+  { p: "x + 1/z^(-1)", res: "x + z"},
 ];
 
 const opTests = [
