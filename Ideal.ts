@@ -11,7 +11,11 @@ export class Ideal {
      * @param generators Generators of the Ideal
      */
     constructor(generators: Polynomial[]){
+      console.log("COMPUTING BASE OF ");
+      generators.forEach((p:Polynomial) => console.log(p.toString()))
       this.generators = Polynomial.buchbergerReduced(generators);
+      console.log("BASE: ");
+      this.generators.forEach((p:Polynomial) => console.log(p.toString()))
     }
   
     /**

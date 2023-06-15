@@ -17,6 +17,7 @@ export class Polynomial {
    * Generators of the ring in R to which the polynomial belongs
    */
   private vars: string[];
+  // static order : "lex" | "degrevlex" = "lex";
 
   /**
    * 
@@ -54,6 +55,7 @@ export class Polynomial {
     }
 
     // Aplicamos LEX
+    // Polynomial.order==="lex" ? this.applyLex() : this.applyDegRevLex();
     this.applyLex();
   }
 
@@ -66,25 +68,25 @@ export class Polynomial {
     });
   }
 
-  // private applyDegRevLex(){
-  //   this.monomials = this.monomials.sort(function (a, b) {
-  //     const expA = a.getExp();
-  //     const expB = b.getExp();
-  //     const degA : number = expA.reduce((x,y)=>x+y);
-  //     const degB : number = expB.reduce((x,y)=>x+y);
+  private applyDegRevLex(){
+    this.monomials = this.monomials.sort(function (a, b) {
+      const expA = a.getExp();
+      const expB = b.getExp();
+      const degA : number = expA.reduce((x,y)=>x+y);
+      const degB : number = expB.reduce((x,y)=>x+y);
       
-  //     if(degA === degB)
-  //       return -1;
+      if(degA === degB)
+        return -1;
       
-  //     for(let i=expA.length-1; i>=0; i--){
-  //       if(expA[i] < expB[i])
-  //         return 1;
-  //     }
+      for(let i=expA.length-1; i>=0; i--){
+        if(expA[i] < expB[i])
+          return 1;
+      }
 
-  //     return -1;
+      return -1;
 
-  //   });
-  // }
+    });
+  }
 
   /**
    * Parses a string to a Polynomial
@@ -431,7 +433,10 @@ export class Polynomial {
    */
   isZero(): boolean {
     const n = this.monomials.length;
-    return n === 0 || (n === 1 && this.monomials[0].getCoef() === 0);
+
+    return n === 0 || (n === 1 && (
+      this.monomials[0].getCoef() === 0 || Math.abs(this.monomials[0].getCoef()) < 1e-5
+      ));
   }
 
   /**
@@ -535,8 +540,10 @@ export class Polynomial {
 
     steps["result"] = step;
 
-    if (!mult.isZero())
-      console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN ${fs}`);
+    if (!mult.isZero()){
+      console.log(mult.toString())
+      console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN [${fs}]`);
+    }
 
     return {
       quotients: [...coefs],
@@ -784,6 +791,10 @@ export class Polynomial {
  
       return res;
     }
+
+    // static setOrder(order: "lex" | "degrevlex"){
+    //   this.order = order;
+    // }
   
     private static criterion1(f: Polynomial, g: Polynomial): boolean {
       let res = true;
@@ -983,11 +994,13 @@ export class Polynomial {
 
     console.log("PARAM: " + J);
     const intersection = J[0];
+    if(intersection === undefined)
+      return new Polynomial("0", resVars)
 
     console.log("removing");
     intersection.removeVariables(elimVars);
     console.log("end remov", intersection.toString());
 
-    return intersection !== undefined ? intersection : new Polynomial("0", resVars);
+    return intersection;
   }
 }
