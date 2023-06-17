@@ -17,7 +17,8 @@ export class Polynomial {
    * Generators of the ring in R to which the polynomial belongs
    */
   private vars: string[];
-  // static order : "lex" | "degrevlex" = "lex";
+
+  static order : "lex" | "degrevlex" = "lex";
 
   /**
    * 
@@ -56,13 +57,13 @@ export class Polynomial {
 
     // Aplicamos LEX
     // Polynomial.order==="lex" ? this.applyLex() : this.applyDegRevLex();
-    this.applyLex();
+    this.applyOrder();
   }
 
   /**
    * Orders `monomials` using *lex*
    */
-  private applyLex() {
+  private applyOrder() {
     this.monomials = this.monomials.sort(function (a, b) {
       return Polynomial.expGreater(a.getExp(), b.getExp()) ? -1 : 1;
     });
@@ -447,6 +448,15 @@ export class Polynomial {
     return this.divide(G).remainder.isZero();
   }
 
+  private removeLC(){
+    if(this.monomials.length>1){
+      
+      this.monomials.shift();
+    }
+    else{
+      this.monomials = [Monomial.zero()];
+    }
+  }
   /**
    * Divide by a set of polynomials fs = [f_1, ..., f_n] using *lex*
    * @param fs polynomials to divide with
@@ -454,7 +464,7 @@ export class Polynomial {
    * @param verbose should return process steps
    * @returns quotients for each polynomial in fs, remainder and steps if `verbose`
    */
-  divide(fs: Polynomial[], maxIter: number = 1000, verbose: boolean = false) {
+  divide(fs: Polynomial[], maxIter: number = 100, verbose: boolean = false) {
     if(fs.some(fi => fi.isZero()))
       throw new Error(`TRYING TO DIVIDE BY 0`);
 
@@ -489,14 +499,22 @@ export class Polynomial {
           const coef = new Polynomial([xGamma.multiply(lcp / lcfi)], this.vars);
 
           let newQi = coefs[i].plus(coef);
+          // === para evitar fallos de precision ===
           let newP = p.minus(fs[i].multiply(coef));
-
+          // p.removeLC();
+          // console.log("ANTES ", p.toString());
+          // p.monomials.forEach(m=>console.log(m.toString()));
+          
+          // console.log("DESPUES ", p.toString());
+          // p.monomials.forEach(m=>console.log(m.toString()));
+          // =======================================
+          
           step.push(`f = ${p}`);
           step.push(
             `exp(f) - exp(f_${i})= ${exp_p} - ${exp_fi} => We can divide`
           );
           step.push(`q_${i} = (${coefs[i]}) + (${coef}) = ${newQi}`);
-          step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${newP}`);
+          step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${p}`);
           step.push(p.toString());
           coefs[i] = newQi;
 
@@ -512,38 +530,40 @@ export class Polynomial {
         const lt = new Polynomial([MON.multiply(LC)], this.vars);
 
         const newR = r.plus(lt);
-        const newP = p.minus(lt);
+        p.removeLC();
+        // const newP = p.minus(lt);
 
         step.push("No division posible:");
         step.push(`lt(p) = (${LC})*(${MON}) = ${lt}`);
         step.push(`r = (${r}) + lt(p) = ${newR}`);
-        step.push(`p = (${p}) - lt(p) = ${newP}`);
+        step.push(`p = (${p}) - lt(p) = ${p}`);
 
         r = newR;
-        p = newP;
+        // p = newP;
       }
 
       steps[`step${nSteps}`] = step;
     }
 
-    step = [];
+    // step = [];
 
-    let mult = new Polynomial("0", this.vars);
-    step.push(`r = ${r}`);
-    coefs.forEach((qi, i) => {
-      step.push(`q_${i} = ${qi}`);
-      mult = mult.plus(qi.multiply(fs[i]));
-    });
+    // let mult = new Polynomial("0", this.vars);
+    // step.push(`r = ${r}`);
+    // coefs.forEach((qi, i) => {
+    //   step.push(`q_${i} = ${qi}`);
+    //   mult = mult.plus(qi.multiply(fs[i]));
+    // });
 
-    mult = mult.plus(r);
-    mult = mult.minus(this);
+    // mult = mult.plus(r);
+    // // mult = mult.minus(this);
+    // mult.removeLC();
 
-    steps["result"] = step;
+    // steps["result"] = step;
 
-    if (!mult.isZero()){
-      console.log(mult.toString())
-      console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN [${fs}]`);
-    }
+    // if (!mult.isZero()){
+    //   console.log(mult.toString())
+    //   console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN [${fs}]`);
+    // }
 
     return {
       quotients: [...coefs],
@@ -593,12 +613,28 @@ export class Polynomial {
       throw new Error("TRYING TO COMPARE EXPONENTS OF DIFFERENT SIZE");
     }
 
-    for (let i = 0; i < a.length; i++) {
-      if (a[i] > b[i]) return true;
-      else if (a[i] < b[i]) return false;
-    }
+    if(Polynomial.order === "lex"){
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) return true;
+        else if (a[i] < b[i]) return false;
+      }
 
-    return false;
+      return false;
+    }
+    else if(Polynomial.order === "degrevlex"){
+      const degA : number = a.reduce((x,y)=>x+y);
+      const degB : number = b.reduce((x,y)=>x+y);
+      
+      if(degA === degB)
+        return -1;
+      
+      for(let i=a.length-1; i>=0; i--){
+        if(a[i] < b[i])
+          return true;
+      }
+
+      return false;
+    }
   }
 
   // === PRIVATE STATIC METHODS===

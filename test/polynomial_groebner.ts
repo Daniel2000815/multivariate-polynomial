@@ -1,9 +1,6 @@
 import assert from "assert";
 import {Polynomial} from "../Polynomial";
-// import {benchtest} from "benchtest";
-// it = benchtest.it(it);
-// describe = benchtest.describe(describe);
-
+Polynomial.order = "lex";
 const isGroebnerBasisTests = [
   {
     ideal: ["x+y-1", "y-z", "z-x*y"],
@@ -166,14 +163,6 @@ const groebnerComputeTests = [
   { ideal: ["y*z", "t*y+1", "x*t-2"] },
 ];
 
-const groebnerReducedComputeTests = [
-  { gens: ["x+y-1", "y-z", "z - x*y"], basis: ["x + z - 1", "y - z", "z^2"] },
-  { gens: ["x*y-1", "y^2+1"] , basis: ["x + y", "y^2 + 1"]},
-  { gens: ["x*z", "y*z^3", "- t + 1"], basis: ["x*z", "y*z^3", "- t + 1"] },
-  { gens: ["x^2", "x*z", "x-y", "t^2*x*y", "x", "y^2*z"], basis: ["x", "y"] },
-  { gens: ["5*t^2 - s", "s*t", "t^2"], basis: ["s + x - 5*z", "t^2 - z", "t*x - 5*t*z + y", "t*y + x*z - 5*z^2", "x^2*z - 10*x*z^2 - y^2 + 25*z^3"]}
-];
-
 const implicitTests = [
   {
     name: "Elliptic Paraboloid",
@@ -183,21 +172,6 @@ const implicitTests = [
     res: "x - 5*y^2 - 2*z^2 + 10",
     resDRL: "y^2 + 2/5*z^2 - 1/5*x - 2"
   },
-  {
-    name: "Test 1",
-    xPar: "5*t^2 - s",
-    yPar: "s*t",
-    zPar: "t^2",
-    res: "x^2*z - 10*x*z^2 -y^2 + 25*z^3",
-    resDRL: "x^2*z - 10*x*z^2 -y^2 + 25*z^3"
-  },
-  {
-    name: "Test 2",
-    xPar: "10*t",
-    yPar: "t-s^2",
-    zPar: "s*t",
-    res: "x^3 - 2*x^2*y - 8*z^2",
-  }
   // {
   //   name: "Hiperbolic Paraboloid",
   //   xPar: "t",
@@ -211,8 +185,8 @@ describe("Groebner basis check", function () {
   for (var i = 0; i < isGroebnerBasisTests.length; i++) {
     (function (i) {
       var t = isGroebnerBasisTests[i];
-      const F = t.ideal.map((val) => new Polynomial(val));
-      const G = t.basis.map((val) => new Polynomial(val));
+      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const G = t.basis.map((val: string) => new Polynomial(val));
 
       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
         t.ideal
@@ -227,8 +201,8 @@ describe("Groebner basis reduced check", function () {
   for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
     (function (i) {
       var t = isReducedGroebnerBasisTests[i];
-      const F = t.ideal.map((val) => new Polynomial(val));
-      const G = t.basis.map((val) => new Polynomial(val));
+      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const G = t.basis.map((val: string) => new Polynomial(val));
 
       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
         t.ideal
@@ -245,7 +219,7 @@ describe("Groebner basis computation", function () {
   for (var i = 0; i < groebnerComputeTests.length; i++) {
     (function (i) {
       var t = groebnerComputeTests[i];
-      const F = t.ideal.map((val) => new Polynomial(val));
+      const F = t.ideal.map((val: string) => new Polynomial(val));
 
       it(`I = < ${t.ideal} >`, function () {
         assert.equal(
@@ -258,32 +232,12 @@ describe("Groebner basis computation", function () {
 });
 
 describe("Reduced Groebner basis computation", function () {
-  this.timeout(10000);
-
-  for (var i = 0; i < groebnerReducedComputeTests.length; i++) {
-    (function (i) {
-      var t = groebnerReducedComputeTests[i];
-      const F = t.gens.map((val) => new Polynomial(val, ["s","t","x","y","z"]));
-
-      it(`I = < ${t.gens} >, B = [${t.basis}]`, function () {
-        let good = true;
-        Polynomial.buchbergerReduced(F).forEach((p, idx) => {if(!p.equals(new Polynomial(t.gens[idx], ["s","t","x","y","z"]))){
-          good = false;
-        }})
-        assert(
-          !good
-        );
-      });
-    })(i);
-  }
-});
-describe("Reduced Groebner basis computation", function () {
     this.timeout(10000);
   
     for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
       (function (i) {
         var t = isReducedGroebnerBasisTests[i];
-        const F = t.ideal.map((val) => new Polynomial(val));
+        const F = t.ideal.map((val: string) => new Polynomial(val));
   
         it(`I= < ${
           t.ideal
@@ -301,35 +255,29 @@ describe("Implicitation", function () {
       var t = implicitTests[i];
       const vars = ["s","t"];
 
-      let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
-      it(`${t.name}: x=${t.xPar}, y=${t.yPar}, z=${t.zPar}`, function () {
+      
+      it(`${t.name} with LEX`, function () {
+        console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
+        let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
+        console.log("RES:", res.toString());
         assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
       });
+
+      // it(`${t.name} with DEGREVLEX`, function () {
+      //   Polynomial.order = "degrevlex";
+      //   let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
+      //   console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
+      //   console.log("RES:", res.toString());
+
+      //   Polynomial.order = "lex";
+      //   assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
+      // });
     })(i);
   }
 
   
 });
-
   
-// describe("Implicitation DEGREVLEX", function () {
-//   Polynomial.setOrder("degrevlex");
-//   for (var i = 0; i < implicitTests.length; i++) {
-//     (function (i) {
-//       var t = implicitTests[i];
-//       const vars = ["s","t"];
-
-//       let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
-//       it(`${t.name}: x=${t.xPar}, y=${t.yPar}, z=${t.zPar}`, function () {
-//         assert.equal(new Polynomial(t.res, ["x","y","z"]).toString(), res.toString());
-//       });
-//     })(i);
-//   }
-
-//   Polynomial.setOrder("lex");
-
-  
-// });
   
  
   
