@@ -2,7 +2,6 @@ import {Polynomial} from "../Polynomial";
 
 const Benchmark = require("benchmark");
 const suite = new Benchmark.Suite();
-const { HilbertAlgorithm } = require("../dist/lib/es5/hilbertAlgorithm");
 
 suite
   .add("Groebner", function () {

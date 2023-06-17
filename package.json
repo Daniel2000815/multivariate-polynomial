@@ -6,10 +6,9 @@
   "scripts": {
     "test-polynomial": "ts-mocha test/polynomial.ts",
     "test-polynomial-vars": "ts-mocha test/polynomial_vars.ts",
-    "test-polynomial-groebner": "ts-mocha --allow-natives-syntax --reporter mocha-performance test/polynomial_groebner.ts",
+    "test-polynomial-groebner": "ts-mocha test/polynomial_groebner.js",
     "test-monomial": "ts-mocha test/monomial.ts",
     "test": "ts-mocha test/*.ts",
-    "benchmarks": "ts-node benchmarks/benchmarks.ts --project tsconfig.benchmarks.json",
     "doc": "npx typedoc ./Polynomial.ts ./Monomial.ts ./Ideal.ts"
   },
   "keywords": [
@@ -34,6 +33,7 @@
     "@types/benchmark": "^2.1.2",
     "@types/mocha": "^10.0.0",
     "benchmark": "^2.1.4",
+    "benchtest": "^3.2.0",
     "mocha": "^10.1.0",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1"

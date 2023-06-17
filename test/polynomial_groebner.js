@@ -1,5 +1,8 @@
 import assert from "assert";
 import {Polynomial} from "../Polynomial";
+// import {benchtest} from "benchtest";
+// it = benchtest.it(it);
+// describe = benchtest.describe(describe);
 
 const isGroebnerBasisTests = [
   {
@@ -208,8 +211,8 @@ describe("Groebner basis check", function () {
   for (var i = 0; i < isGroebnerBasisTests.length; i++) {
     (function (i) {
       var t = isGroebnerBasisTests[i];
-      const F = t.ideal.map((val: string) => new Polynomial(val));
-      const G = t.basis.map((val: string) => new Polynomial(val));
+      const F = t.ideal.map((val) => new Polynomial(val));
+      const G = t.basis.map((val) => new Polynomial(val));
 
       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
         t.ideal
@@ -224,8 +227,8 @@ describe("Groebner basis reduced check", function () {
   for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
     (function (i) {
       var t = isReducedGroebnerBasisTests[i];
-      const F = t.ideal.map((val: string) => new Polynomial(val));
-      const G = t.basis.map((val: string) => new Polynomial(val));
+      const F = t.ideal.map((val) => new Polynomial(val));
+      const G = t.basis.map((val) => new Polynomial(val));
 
       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
         t.ideal
@@ -242,7 +245,7 @@ describe("Groebner basis computation", function () {
   for (var i = 0; i < groebnerComputeTests.length; i++) {
     (function (i) {
       var t = groebnerComputeTests[i];
-      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const F = t.ideal.map((val) => new Polynomial(val));
 
       it(`I = < ${t.ideal} >`, function () {
         assert.equal(
@@ -260,11 +263,11 @@ describe("Reduced Groebner basis computation", function () {
   for (var i = 0; i < groebnerReducedComputeTests.length; i++) {
     (function (i) {
       var t = groebnerReducedComputeTests[i];
-      const F = t.gens.map((val: string) => new Polynomial(val, ["s","t","x","y","z"]));
+      const F = t.gens.map((val) => new Polynomial(val, ["s","t","x","y","z"]));
 
       it(`I = < ${t.gens} >, B = [${t.basis}]`, function () {
         let good = true;
-        Polynomial.buchbergerReduced(F).forEach((p:Polynomial, idx: number) => {if(!p.equals(new Polynomial(t.gens[idx], ["s","t","x","y","z"]))){
+        Polynomial.buchbergerReduced(F).forEach((p, idx) => {if(!p.equals(new Polynomial(t.gens[idx], ["s","t","x","y","z"]))){
           good = false;
         }})
         assert(
@@ -280,7 +283,7 @@ describe("Reduced Groebner basis computation", function () {
     for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
       (function (i) {
         var t = isReducedGroebnerBasisTests[i];
-        const F = t.ideal.map((val: string) => new Polynomial(val));
+        const F = t.ideal.map((val) => new Polynomial(val));
   
         it(`I= < ${
           t.ideal
