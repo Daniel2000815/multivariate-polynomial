@@ -49,8 +49,8 @@ export class Polynomial {
           this.monomials = p.length>1 ? p.filter(m => m.getCoef()!==0) : p;
         }
         else{
-          p.forEach(m =>console.log(m.getExp()));
-          p.forEach(m =>console.log(m.getVars()));
+          // p.forEach(m =>console.log(m.getExp()));
+          // p.forEach(m =>console.log(m.getVars()));
           throw new Error(`INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS: Ring vars: ${this.vars}; Pol. vars: ${p[0].getVars()}`);
         }
     }
@@ -468,18 +468,18 @@ export class Polynomial {
     if(fs.some(fi => fi.isZero()))
       throw new Error(`TRYING TO DIVIDE BY 0`);
 
-    let nSteps = 0;
-    var steps: { [k: string]: any } = {};
-    let step: string[] = [];
+    // let nSteps = 0;
+    // var steps: { [k: string]: any } = {};
+    // let step: string[] = [];
     let currIt = 0;
     const s = fs.length;
 
     let p = this.clone();
     let r = new Polynomial("0", this.vars);
     let coefs: Polynomial[] = Array(s).fill(new Polynomial("0", this.vars));
-
+    
     while (!p.isZero() && currIt < maxIter) {
-      nSteps++;
+      // nSteps++;
       currIt++;
       let i = 0;
       let divFound = 0;
@@ -489,7 +489,7 @@ export class Polynomial {
         const exp_fi = fs[i].exp();
         const gamma = Polynomial.expMinus(exp_p, exp_fi);
 
-        step = [];
+        // step = [];
 
         if (gamma.every((item) => item >= 0)) {
           const xGamma = new Monomial(1, gamma, this.vars);
@@ -509,13 +509,13 @@ export class Polynomial {
           // p.monomials.forEach(m=>console.log(m.toString()));
           // =======================================
           
-          step.push(`f = ${p}`);
-          step.push(
-            `exp(f) - exp(f_${i})= ${exp_p} - ${exp_fi} => We can divide`
-          );
-          step.push(`q_${i} = (${coefs[i]}) + (${coef}) = ${newQi}`);
-          step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${p}`);
-          step.push(p.toString());
+          // step.push(`f = ${p}`);
+          // step.push(
+          //   `exp(f) - exp(f_${i})= ${exp_p} - ${exp_fi} => We can divide`
+          // );
+          // step.push(`q_${i} = (${coefs[i]}) + (${coef}) = ${newQi}`);
+          // step.push(`p = (${p}) - (${coef} * (${fs[i]}) ) = ${p}`);
+          // step.push(p.toString());
           coefs[i] = newQi;
 
           p = newP;
@@ -533,42 +533,22 @@ export class Polynomial {
         p.removeLC();
         // const newP = p.minus(lt);
 
-        step.push("No division posible:");
-        step.push(`lt(p) = (${LC})*(${MON}) = ${lt}`);
-        step.push(`r = (${r}) + lt(p) = ${newR}`);
-        step.push(`p = (${p}) - lt(p) = ${p}`);
+        // step.push("No division posible:");
+        // step.push(`lt(p) = (${LC})*(${MON}) = ${lt}`);
+        // step.push(`r = (${r}) + lt(p) = ${newR}`);
+        // step.push(`p = (${p}) - lt(p) = ${p}`);
 
         r = newR;
         // p = newP;
       }
 
-      steps[`step${nSteps}`] = step;
+      // steps[`step${nSteps}`] = step;
     }
-
-    // step = [];
-
-    // let mult = new Polynomial("0", this.vars);
-    // step.push(`r = ${r}`);
-    // coefs.forEach((qi, i) => {
-    //   step.push(`q_${i} = ${qi}`);
-    //   mult = mult.plus(qi.multiply(fs[i]));
-    // });
-
-    // mult = mult.plus(r);
-    // // mult = mult.minus(this);
-    // mult.removeLC();
-
-    // steps["result"] = step;
-
-    // if (!mult.isZero()){
-    //   console.log(mult.toString())
-    //   console.error(`ERROR COMPUTING DIVISION OF ${this.toString()} IN [${fs}]`);
-    // }
-
+    
     return {
       quotients: [...coefs],
       remainder: r,
-      steps: steps,
+      // steps: steps,
     };
   }
 
@@ -777,7 +757,7 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if (!this.criterion1(f, g) && !this.criterion3(f, g, newG)) {
+          if (true) {
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -793,6 +773,7 @@ export class Polynomial {
         }
       } while (added && currIt < maxIter);
   
+      console.log("operaciones ahorradas ", opAhorradas);
       return G;
     }
 
@@ -999,7 +980,7 @@ export class Polynomial {
 
       const elimVars = fx.getVars().filter(v => !parameters.includes(v));
 
-      console.log("VARS: " + elimVars);
+      // console.log("VARS: " + elimVars);
     if(elimVars.some(v => ["x","y","z"].includes(v)))
       throw new Error("PARAMETRIZATIONS CAN'T USE X,Y,Z VARIABLES");
 
@@ -1007,11 +988,9 @@ export class Polynomial {
     const impVars = elimVars.concat(resVars);
 
 
-    console.log("TEST1");
     const x = new Polynomial("x", impVars);
     const y = new Polynomial("y",impVars);
     const z = new Polynomial("z",impVars);
-    console.log("TEST2");
     fx.pushVariables(resVars);
     fy.pushVariables(resVars);
     fz.pushVariables(resVars);
@@ -1021,21 +1000,16 @@ export class Polynomial {
     let J : Polynomial[] = [];
     
     I.getGenerators().forEach(gen => {
-      console.log("TEST: " + gen);
       if(!gen.useAnyVariables(elimVars)){
-        console.log("AÑADO " + gen);
         J.push(gen);
       }
     })
 
-    console.log("PARAM: " + J);
     const intersection = J[0];
     if(intersection === undefined)
       return new Polynomial("0", resVars)
 
-    console.log("removing");
     intersection.removeVariables(elimVars);
-    console.log("end remov", intersection.toString());
 
     return intersection;
   }
