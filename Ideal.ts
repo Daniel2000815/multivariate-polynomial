@@ -49,12 +49,12 @@ export class Ideal {
   
       let res : Polynomial[] = [];
       H.generators.forEach(gen => {
-        if(!gen.hasVariable("t")){
+        if(!gen.hasVariables(["t"])){
           res.push(gen);
         }
       })
   
-      return res;
+      return new Ideal(res);
     }
   
   }

@@ -214,6 +214,22 @@ const implicitTests = [
     res: "x - 5*y^2 - 2*z^2 + 10",
     resDRL: "y^2 + 2/5*z^2 - 1/5*x - 2"
   },
+  {
+    name: "Plane",
+    xPar: "s*t+s+t+1",
+    yPar: "-s*t",
+    zPar: "-s-t",
+    res: "x+y+z-1",
+    resDRL: "y^2 + 2/5*z^2 - 1/5*x - 2"
+  },
+  {
+    name: "Plane",
+    xPar: "s+t",
+    yPar: "s",
+    zPar: "t",
+    res: "x-y-z",
+    resDRL: "y^2 + 2/5*z^2 - 1/5*x - 2"
+  },
   // {
   //   name: "Hiperbolic Paraboloid",
   //   xPar: "t",
@@ -223,55 +239,55 @@ const implicitTests = [
   // },
 ];
 
-// describe("Groebner basis check", function () {
-//   for (var i = 0; i < isGroebnerBasisTests.length; i++) {
-//     (function (i) {
-//       var t = isGroebnerBasisTests[i];
-//       const F = t.ideal.map((val: string) => new Polynomial(val));
-//       const G = t.basis.map((val: string) => new Polynomial(val));
+describe("Groebner basis check", function () {
+  for (var i = 0; i < isGroebnerBasisTests.length; i++) {
+    (function (i) {
+      var t = isGroebnerBasisTests[i];
+      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const G = t.basis.map((val: string) => new Polynomial(val));
 
-//       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
-//         t.ideal
-//       } >`, function () {
-//         assert.equal(Polynomial.isGroebnerBasis(F, G), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} basis of I= < ${
+        t.ideal
+      } >`, function () {
+        assert.equal(Polynomial.isGroebnerBasis(F, G), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Groebner basis reduced check", function () {
-//   for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
-//     (function (i) {
-//       var t = isReducedGroebnerBasisTests[i];
-//       const F = t.ideal.map((val: string) => new Polynomial(val));
-//       const G = t.basis.map((val: string) => new Polynomial(val));
+describe("Groebner basis reduced check", function () {
+  for (var i = 0; i < isReducedGroebnerBasisTests.length; i++) {
+    (function (i) {
+      var t = isReducedGroebnerBasisTests[i];
+      const F = t.ideal.map((val: string) => new Polynomial(val));
+      const G = t.basis.map((val: string) => new Polynomial(val));
 
-//       it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
-//         t.ideal
-//       } >`, function () {
-//         assert.equal(Polynomial.isReducedGroebnerBasis(F, G), t.res);
-//       });
-//     })(i);
-//   }
-// });
+      it(`G={${t.basis}} ${t.res ? "IS" : "ISN'T"} reduced basis of I= < ${
+        t.ideal
+      } >`, function () {
+        assert.equal(Polynomial.isReducedGroebnerBasis(F, G), t.res);
+      });
+    })(i);
+  }
+});
 
-// describe("Groebner basis computation", function () {
-//   this.timeout(10000);
+describe("Groebner basis computation", function () {
+  this.timeout(10000);
 
-//   for (var i = 0; i < groebnerComputeTests.length; i++) {
-//     (function (i) {
-//       var t = groebnerComputeTests[i];
-//       const F = t.ideal.map((val: string) => new Polynomial(val));
+  for (var i = 0; i < groebnerComputeTests.length; i++) {
+    (function (i) {
+      var t = groebnerComputeTests[i];
+      const F = t.ideal.map((val: string) => new Polynomial(val));
 
-//       it(`I = < ${t.ideal} >`, function () {
-//         assert.equal(
-//           Polynomial.isGroebnerBasis(F, Polynomial.buchbergerReduced(F)),
-//           true
-//         );
-//       });
-//     })(i);
-//   }
-// });
+      it(`I = < ${t.ideal} >`, function () {
+        assert.equal(
+          Polynomial.isGroebnerBasis(F, Polynomial.buchbergerReduced(F)),
+          true
+        );
+      });
+    })(i);
+  }
+});
 
 describe("Reduced Groebner basis computation", function () {
     this.timeout(10000);
@@ -291,34 +307,34 @@ describe("Reduced Groebner basis computation", function () {
 });
 
 
-// describe("Implicitation", function () {
-//   for (var i = 0; i < implicitTests.length; i++) {
-//     (function (i) {
-//       var t = implicitTests[i];
-//       const vars = ["s","t"];
+describe("Implicitation", function () {
+  for (var i = 0; i < implicitTests.length; i++) {
+    (function (i) {
+      var t = implicitTests[i];
+      const vars = ["s","t"];
 
       
-//       it(`${t.name} with LEX`, function () {
-//         console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
-//         let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
-//         console.log("RES:", res.toString());
-//         assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
-//       });
+      it(`${t.name} with LEX`, function () {
+        console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
+        let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
+        console.log("RES:", res.toString());
+        assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
+      });
 
-//       // it(`${t.name} with DEGREVLEX`, function () {
-//       //   Polynomial.order = "degrevlex";
-//       //   let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
-//       //   console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
-//       //   console.log("RES:", res.toString());
+      // it(`${t.name} with DEGREVLEX`, function () {
+      //   Polynomial.order = "degrevlex";
+      //   let res = Polynomial.implicitateR3(new Polynomial(t.xPar, vars), new Polynomial(t.yPar, vars), new Polynomial(t.zPar, vars));
+      //   console.log("EXPECTED:", new Polynomial(t.res, ["x","y","z"]).toString());
+      //   console.log("RES:", res.toString());
 
-//       //   Polynomial.order = "lex";
-//       //   assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
-//       // });
-//     })(i);
-//   }
+      //   Polynomial.order = "lex";
+      //   assert(res.equals(new Polynomial(t.res, ["x","y","z"])));
+      // });
+    })(i);
+  }
 
   
-// });
+});
   
   
  

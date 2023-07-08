@@ -173,20 +173,13 @@ export class Polynomial {
     return this.monomials;
   }
 
-  /**
-   * 
-   * Checks if `v` is a variable of the ring of this polynomial
-   */
-  hasVariable(v: string){
-    return this.vars.includes(v);
-  }
 
   /**
    * 
    * Checks if all variables in `v` are variables of the ring of this polynomial
    */
   hasVariables(v: string[]){
-    return v.every(vi => this.hasVariable(vi));
+    return v.every(vi => this.vars.includes(vi));
   }
 
   /**
@@ -745,6 +738,7 @@ export class Polynomial {
       let G = F;
       let added;
       let opAhorradas = 0;
+      let reducciones = 0;
 
       do {
         currIt++;
@@ -757,7 +751,7 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if (true) {
+          if (!this.criterion1(f,g) && !this.criterion2(f,g,newG)) {
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -766,6 +760,9 @@ export class Polynomial {
               G.push(r);
               added = true;
             }
+            else{
+              reducciones++;
+            }
           }
           else{
             opAhorradas++;
@@ -773,7 +770,8 @@ export class Polynomial {
         }
       } while (added && currIt < maxIter);
   
-      console.log("operaciones ahorradas ", opAhorradas);
+      // console.log("operaciones ahorradas ", opAhorradas);
+      console.log("reducciones a 0 ", reducciones);
       return G;
     }
 
@@ -845,26 +843,26 @@ export class Polynomial {
       return res;
     }
   
-    private static criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
-      // return false;
+    // private static criterion2(gi: Polynomial, gj: Polynomial, G: Polynomial[]): boolean {
+    //   // return false;
   
-      const a = gi.lcm(gj);
-      const startIndex = Math.max(G.indexOf(gi), G.indexOf(gj)) + 1;
-      let res = false;
+    //   const a = gi.lcm(gj);
+    //   const startIndex = Math.max(G.indexOf(gi), G.indexOf(gj)) + 1;
+    //   let res = false;
   
-      for(let i=startIndex; i<G.length && !res; i++){
-        if(this.expIsMultiple(a.getExp(), G[i].exp())){
-          res = true;
-        }
-      }
+    //   for(let i=startIndex; i<G.length && !res; i++){
+    //     if(this.expIsMultiple(a.getExp(), G[i].exp())){
+    //       res = true;
+    //     }
+    //   }
   
-      return res;
-    }
+    //   return res;
+    // }
 
     /**
      * 
      */
-    private static criterion3(f: Polynomial, g: Polynomial, G: Polynomial[]) : boolean {
+    private static criterion2(f: Polynomial, g: Polynomial, G: Polynomial[]) : boolean {
       let res = false;
       const startIndex = Math.max(G.indexOf(f), G.indexOf(g)) + 1;
 
