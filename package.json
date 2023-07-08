@@ -36,6 +36,9 @@
   },
   "dependencies": {
     "@types/node": "^18.11.9",
+    "exactnumber": "^1.0.1",
+    "fraction.js": "^4.2.0",
+    "fractional": "^1.0.0",
     "nerdamer": "^1.1.13",
     "nerdamer-ts": "^1.2.0",
     "typescript": "^4.9.3"

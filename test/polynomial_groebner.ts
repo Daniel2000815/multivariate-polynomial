@@ -296,10 +296,12 @@ describe("Reduced Groebner basis computation", function () {
       (function (i) {
         var t = groebnerComputeTests[i];
         const F = t.ideal.map((val: string) => new Polynomial(val));
-  
         it(`I= < ${
           t.ideal
         } >`, function () {
+          console.log("===BASE===")
+          Polynomial.buchbergerReduced(F).forEach((p:Polynomial)=>console.log(p.toString()))
+          console.log("==============")
           assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
         });
       })(i);
