@@ -2,6 +2,8 @@ import nerdamer from "nerdamer-ts";
 import nerdamerjs from "nerdamer";
 import {Monomial} from "./Monomial";
 import {Ideal} from "./Ideal";
+import { ExactNumberType, ExactNumber as N } from 'exactnumber';
+
 
 require("nerdamer/algebra");
 
@@ -486,10 +488,10 @@ export class Polynomial {
 
         if (gamma.every((item) => item >= 0)) {
           const xGamma = new Monomial(1, gamma, this.vars);
-          const lcp = new Monomial(p.lc());
-          const lcfi = new Monomial(fs[i].lc());
+          const lcp = N(p.lc());
+          const lcfi = N(fs[i].lc());
 
-          const coef = new Polynomial([xGamma.multiply(lcp.divide(lcfi))], this.vars);
+          const coef = new Polynomial([xGamma.multiply(lcp.div(lcfi).toNumber())], this.vars);
 
           let newQi = coefs[i].plus(coef);
           // === para evitar fallos de precision ===
@@ -518,9 +520,9 @@ export class Polynomial {
         }
       }
       if (divFound === 0) {
-        const LC = new Monomial(p.lc());
+        const LC = N(p.lc());
         const MON = new Monomial(1, exp_p, this.vars);
-        const lt = new Polynomial([MON.multiply(LC)], this.vars);
+        const lt = new Polynomial([MON.multiply(LC.toNumber())], this.vars);
 
         const newR = r.plus(lt);
         p.removeLC();
