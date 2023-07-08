@@ -129,7 +129,7 @@ export class Monomial {
      * Coefficient of the monomial
      */
     getCoef() {
-      return this.coef;
+      return this.coef.toNumber();
     }
   
     /**

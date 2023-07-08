@@ -2,8 +2,6 @@ import nerdamer from "nerdamer-ts";
 import nerdamerjs from "nerdamer";
 import {Monomial} from "./Monomial";
 import {Ideal} from "./Ideal";
-import { ExactNumberType, ExactNumber as N } from 'exactnumber';
-
 
 require("nerdamer/algebra");
 
@@ -48,7 +46,7 @@ export class Polynomial {
           m.getExp().length === this.vars.length &&
           m.getVars().every((v,idx) => v===this.vars[idx])
         )){
-          this.monomials = p.length>1 ? p.filter(m => !m.getCoef().isZero()) : p;
+          this.monomials = p.length>1 ? p.filter(m => m.getCoef()!==0) : p;
         }
         else{
           // p.forEach(m =>console.log(m.getExp()));
@@ -268,7 +266,7 @@ export class Polynomial {
     } else {
       this.monomials.forEach((pm: Monomial) => {
         q.monomials.forEach((qm: Monomial) => {
-          const coef = pm.getCoef().mul(qm.getCoef());
+          const coef = pm.getCoef() * qm.getCoef();
           const exp = pm.getExp().map(function (num, idx) {
             return num + qm.getExp()[idx];
           });
@@ -285,7 +283,7 @@ export class Polynomial {
           const m = acc.find((mon) => cur.equalExponent(mon));
           if (m !== undefined) {
             const i = acc.indexOf(m);
-            acc[i].setCoef(acc[i].plus(cur).getCoef());
+            acc[i].setCoef(acc[i].getCoef() + cur.getCoef());
           } else acc.push(cur);
 
           return acc;
@@ -354,7 +352,7 @@ export class Polynomial {
     return (
       this.monomials.length === q.monomials.length &&
       (
-        this.monomials.length === 1 && (this.monomials[0].getCoef().isZero() && q.monomials[0].getCoef().isZero()) ||
+        this.monomials.length === 1 && (this.monomials[0].getCoef() === 0 && q.monomials[0].getCoef() ===0) ||
         this.monomials.every((m, idx) => m.equals(q.monomials[idx]))
       )
     );
@@ -388,7 +386,7 @@ export class Polynomial {
    *
    * Second leader coefficient
    */
-  slc() {
+  slc() : number{
     return this.monomials.length > 1 ? this.monomials[1].getCoef() : 0;
   }
 
@@ -431,7 +429,7 @@ export class Polynomial {
     const n = this.monomials.length;
 
     return n === 0 || (n === 1 && (
-      this.monomials[0].getCoef().isZero() || Math.abs(this.monomials[0].getCoef().toNumber()) < 1e-5
+      this.monomials[0].getCoef() === 0 || Math.abs(this.monomials[0].getCoef()) < 1e-5
       ));
   }
 
@@ -488,10 +486,10 @@ export class Polynomial {
 
         if (gamma.every((item) => item >= 0)) {
           const xGamma = new Monomial(1, gamma, this.vars);
-          const lcp = N(p.lc());
-          const lcfi = N(fs[i].lc());
+          const lcp = p.lc();
+          const lcfi = fs[i].lc();
 
-          const coef = new Polynomial([xGamma.multiply(lcp.div(lcfi).toNumber())], this.vars);
+          const coef = new Polynomial([xGamma.multiply(lcp / lcfi)], this.vars);
 
           let newQi = coefs[i].plus(coef);
           // === para evitar fallos de precision ===
@@ -520,9 +518,9 @@ export class Polynomial {
         }
       }
       if (divFound === 0) {
-        const LC = N(p.lc());
+        const LC = p.lc();
         const MON = new Monomial(1, exp_p, this.vars);
-        const lt = new Polynomial([MON.multiply(LC.toNumber())], this.vars);
+        const lt = new Polynomial([MON.multiply(LC)], this.vars);
 
         const newR = r.plus(lt);
         p.removeLC();
@@ -675,7 +673,7 @@ export class Polynomial {
       const newG = G.filter((p) => !p.equals(g));
       const expNewG = Polynomial.exp(newG);
 
-      if (!g.lc().isOne()) res = false;
+      if (g.lc() !== 1) res = false;
 
       for (let j = 0; j < suppG.length && res; j++) {
         for (let k = 0; k < expNewG.length && res; k++) {
@@ -793,7 +791,7 @@ export class Polynomial {
     static reduce(G: Polynomial[]) : Polynomial[]{
       let res : Polynomial[] = [];
       
-      G = G.map(g => g.multiply( g.lc().inv().toNumber()));
+      G = G.map(g => g.multiply(1/g.lc()));
 
       for(let i=0; i<G.length; i++){
         let g = G[i];
