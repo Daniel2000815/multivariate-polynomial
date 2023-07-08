@@ -155,7 +155,7 @@ const isReducedGroebnerBasisTests = [
 const groebnerComputeTests = [
   { ideal: ["x", "y", "z", "x*z"] },
   { ideal: ["y^2*z", "t"] },
-  { ideal: ["z^3 - t^2*x*z", "3*x-y", "t"] },
+  { ideal: ["x^2*y^2*z", "t*y", "x*z"] },
   { ideal: ["x^4*y*z^2", "t*z^3", "y*z^5", "t*y"] },
   { ideal: ["x*y^2*z^3", "t*x^2*z", "x*z"] },
   { ideal: ["x*y^2+2", "4*x - z^3", "x*z"] },
@@ -173,36 +173,36 @@ const groebnerComputeTests = [
   { ideal: ["x+y-1", "y-z", "z - x*y", "x*y^2+1", "x^2*z-1", "z", "t*z^2", "x*z"] },
   { ideal: ["x*y^2+2", "4*x - z^3", "x*z", "x*y^2+1", "x^2*z-1", "y^2*z", "t"] },
   { ideal: ["x^10-y^2", "x*y*z^6", "t*z^3", "x*y", "x+y-1", "y*z", "t*y+1", "x*t-2", "y^2*z", "t*x", "z", "t*z^2", "x*z"] },
-  // { ideal: ["x^2-y*z*t", "x*y+z*t^2", "x*z-t^2*y", "t*x-z*y^2", "y*z^2-x^2"] },
-  // { ideal: ["x*y-z", "x^2-y^2", "y^3-z^3", "x^4-t^4"] },
-  // { ideal: ["x*y*z", "x^2*y^2*z^2", "x^3*y^3*z^3", "t^4-x^4*y^4*z^4"] },
-  // { ideal: ["x^2-y^2*z", "x^3-y^3*z^2", "x^4-y^4*z^3", "x^5-y^5*z^4"] },
-  // { ideal: ["x^2*y-z^3", "x^3*y^2-z^4", "x^4*y^3-z^5", "x^5*y^4-z^6"] },
-  // { ideal: ["x*y^2-z^3", "x^2*y^3-z^4", "x^3*y^4-z^5", "x^4*y^5-z^6"] },
-  // { ideal: ["x^2*y^2-z^3", "x^3*y^3-z^4", "x^4*y^4-z^5", "x^5*y^5-z^6"] },
-  // { ideal: ["x^2*y^2*z-t", "x^3*y^3*z^2-t^2", "x^4*y^4*z^3-t^3", "x^5*y^5*z^4-t^4"] },
-  // { ideal: ["x^2*y*z-t^3", "x^3*y^2*z^2-t^4", "x^4*y^3*z^3-t^5", "x^5*y^4*z^4-t^6"] },
-  // { ideal: ["x*y^2*z-t^3", "x^2*y^3*z^2-t^4", "x^3*y^4*z^3-t^5", "x^4*y^5*z^4-t^6"] },
-  // { ideal: ["x^2*y^2*z^2-t^3", "x^3*y^3*z^3-t^4", "x^4*y^4*z^4-t^5", "x^5*y^5*z^5-t^6"] },
-  // { ideal: ["x*y*z-t", "x^2*y^2*z^2-t^2", "x^3*y^3*z^3-t^3", "x^4*y^4*z^4-t^4"] },
-  // { ideal: ["x^2*y*z-t^3", "x^3*y^2*z^2-t^4", "x^4*y^3*z^3-t^5", "x^5*y^4*z^4-t^6"] },
-  // { ideal: ["x*y^2*z-t^3", "x^2*y^3*z^2-t^4", "x^3*y^4*z^3-t^5", "x^4*y^5*z^4-t^6"] },
-  // { ideal: ["x^2*y^2*z^2-t^3", "x^3*y^3*z^3-t^4", "x^4*y^4*z^4-t^5", "x^5*y^5*z^5-t^6"] },
-  // { ideal: ["x*y-z^3", "x^2-y^3", "y^4-z^5", "x^5-t^6"] },
-  // { ideal: ["x*y^2-z^3", "x^2*y-y^3", "y^4*z-z^5", "x^5*y^5-t^6"] },
-  // { ideal: ["x^2*y-z^3", "x^2*y^2-z^4", "x^4*y^3-z^5", "x^5*y^4-t^6"] },
-  // { ideal: ["x^2*y^2-z^3", "x^2*y^3-z^4", "x^4*y^4-z^5", "x^5*y^5-t^6"] },
-  // { ideal: ["x*y*z-z^3", "x^2*y^2*z-z^4", "x^3*y^3*z^2-z^5", "x^4*y^4*z^3-t^6"] },
-  // { ideal: ["x*y*z^2-z^3", "x^2*y^2*z^2-z^4", "x^3*y^3*z^3-z^5", "x^4*y^4*z^4-t^6"] },
-  // { ideal: ["t", "x*y*z", "x^2*y^2*z^2", "x^3*y^3*z^3"] },
-  // { ideal: ["t^3", "x^2*y*z", "x^3*y^2*z^2", "x^4*y^3*z^3"] },
-  // { ideal: ["t^3", "x*y^2*z", "x^2*y^3*z^2", "x^3*y^4*z^3"] },
-  // { ideal: ["t^3", "x^2*y^2*z^2", "x^3*y^3*z^3", "x^4*y^4*z^4"] },
-  // { ideal: ["t^6", "x*y^2-z^3", "x^2*y-y^3", "y^4*z-z^5"] },
-  // { ideal: ["t^6", "x^2*y-z^3", "x^2*y^2-z^4", "x^4*y^3-z^5"] },
-  // { ideal: ["t^6", "x^2*y^2-z^3", "x^2*y^3-z^4", "x^4*y^4-z^5"] },
-  // { ideal: ["t^6", "x*y*z-z^3", "x^2*y^2*z-z^4", "x^3*y^3*z^2-z^5"] },
-  // { ideal: ["t^6", "x*y*z^2-z^3", "x^2*y^2*z^2-z^4", "x^3*y^3*z^3-z^5"] },
+  { ideal: ["x^2-y*z*t", "x*y+z*t^2", "x*z-t^2*y", "t*x-z*y^2", "y*z^2-x^2"] },
+  { ideal: ["x*y-z", "x^2-y^2", "y^3-z^3", "x^4-t^4"] },
+  { ideal: ["x*y*z", "x^2*y^2*z^2", "x^3*y^3*z^3", "t^4-x^4*y^4*z^4"] },
+  { ideal: ["x^2-y^2*z", "x^3-y^3*z^2", "x^4-y^4*z^3", "x^5-y^5*z^4"] },
+  { ideal: ["x^2*y-z^3", "x^3*y^2-z^4", "x^4*y^3-z^5", "x^5*y^4-z^6"] },
+  { ideal: ["x*y^2-z^3", "x^2*y^3-z^4", "x^3*y^4-z^5", "x^4*y^5-z^6"] },
+  { ideal: ["x^2*y^2-z^3", "x^3*y^3-z^4", "x^4*y^4-z^5", "x^5*y^5-z^6"] },
+  { ideal: ["x^2*y^2*z-t", "x^3*y^3*z^2-t^2", "x^4*y^4*z^3-t^3", "x^5*y^5*z^4-t^4"] },
+  { ideal: ["x^2*y*z-t^3", "x^3*y^2*z^2-t^4", "x^4*y^3*z^3-t^5", "x^5*y^4*z^4-t^6"] },
+  { ideal: ["x*y^2*z-t^3", "x^2*y^3*z^2-t^4", "x^3*y^4*z^3-t^5", "x^4*y^5*z^4-t^6"] },
+  { ideal: ["x^2*y^2*z^2-t^3", "x^3*y^3*z^3-t^4", "x^4*y^4*z^4-t^5", "x^5*y^5*z^5-t^6"] },
+  { ideal: ["x*y*z-t", "x^2*y^2*z^2-t^2", "x^3*y^3*z^3-t^3", "x^4*y^4*z^4-t^4"] },
+  { ideal: ["x^2*y*z-t^3", "x^3*y^2*z^2-t^4", "x^4*y^3*z^3-t^5", "x^5*y^4*z^4-t^6"] },
+  { ideal: ["x*y^2*z-t^3", "x^2*y^3*z^2-t^4", "x^3*y^4*z^3-t^5", "x^4*y^5*z^4-t^6"] },
+  { ideal: ["x^2*y^2*z^2-t^3", "x^3*y^3*z^3-t^4", "x^4*y^4*z^4-t^5", "x^5*y^5*z^5-t^6"] },
+  { ideal: ["x*y-z^3", "x^2-y^3", "y^4-z^5", "x^5-t^6"] },
+  { ideal: ["x*y^2-z^3", "x^2*y-y^3", "y^4*z-z^5", "x^5*y^5-t^6"] },
+  { ideal: ["x^2*y-z^3", "x^2*y^2-z^4", "x^4*y^3-z^5", "x^5*y^4-t^6"] },
+  { ideal: ["x^2*y^2-z^3", "x^2*y^3-z^4", "x^4*y^4-z^5", "x^5*y^5-t^6"] },
+  { ideal: ["x*y*z-z^3", "x^2*y^2*z-z^4", "x^3*y^3*z^2-z^5", "x^4*y^4*z^3-t^6"] },
+  { ideal: ["x*y*z^2-z^3", "x^2*y^2*z^2-z^4", "x^3*y^3*z^3-z^5", "x^4*y^4*z^4-t^6"] },
+  { ideal: ["t", "x*y*z", "x^2*y^2*z^2", "x^3*y^3*z^3"] },
+  { ideal: ["t^3", "x^2*y*z", "x^3*y^2*z^2", "x^4*y^3*z^3"] },
+  { ideal: ["t^3", "x*y^2*z", "x^2*y^3*z^2", "x^3*y^4*z^3"] },
+  { ideal: ["t^3", "x^2*y^2*z^2", "x^3*y^3*z^3", "x^4*y^4*z^4"] },
+  { ideal: ["t^6", "x*y^2-z^3", "x^2*y-y^3", "y^4*z-z^5"] },
+  { ideal: ["t^6", "x^2*y-z^3", "x^2*y^2-z^4", "x^4*y^3-z^5"] },
+  { ideal: ["t^6", "x^2*y^2-z^3", "x^2*y^3-z^4", "x^4*y^4-z^5"] },
+  { ideal: ["t^6", "x*y*z-z^3", "x^2*y^2*z-z^4", "x^3*y^3*z^2-z^5"] },
+  { ideal: ["t^6", "x*y*z^2-z^3", "x^2*y^2*z^2-z^4", "x^3*y^3*z^3-z^5"] },
 ];
 
 const implicitTests = [
@@ -299,9 +299,11 @@ describe("Reduced Groebner basis computation", function () {
         it(`I= < ${
           t.ideal
         } >`, function () {
-          console.log("===BASE===")
-          Polynomial.buchbergerReduced(F).forEach((p:Polynomial)=>console.log(p.toString()))
-          console.log("==============")
+          // console.log("===BASE===")
+          // Polynomial.buchbergerReduced(F).forEach((p:Polynomial)=>console.log(p.toString()))
+          // console.log("==============")
+          // Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F))
+          // assert(true);
           assert.equal(Polynomial.isReducedGroebnerBasis(F, Polynomial.buchbergerReduced(F)), true);
         });
       })(i);

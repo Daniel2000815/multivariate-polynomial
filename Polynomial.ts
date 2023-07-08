@@ -260,10 +260,16 @@ export class Polynomial {
   multiply(q: Polynomial | number) {
     let product: Monomial[] = [];
 
+    
     if (typeof q === "number") {
+      if(q===0)
+        return new Polynomial([Monomial.zero(this.vars)], this.vars)
+
       product = this.monomials.map((m) => m.multiply(q));
       return new Polynomial(product, this.vars);
     } else {
+      if(q.isZero())
+        return new Polynomial([Monomial.zero(this.vars)], this.vars)
       this.monomials.forEach((pm: Monomial) => {
         q.monomials.forEach((qm: Monomial) => {
           const coef = pm.getCoef() * qm.getCoef();
@@ -316,7 +322,9 @@ export class Polynomial {
       for (let j = 0; j < q.monomials.length && !foundPair; j++) {
         const mq = q.monomials[j];
         if (mp.equalExponent(mq)) {
-          res.push(mp.plus(mq));
+          let suma = mp.plus(mq)
+          if(!suma.isZero())
+            res.push(suma);
           foundPair = true;
           qMonomialsUsed.push(mq);
         }
@@ -333,7 +341,10 @@ export class Polynomial {
 
     res = res.concat(qMonomialsUnused);
 
-    return new Polynomial(res, this.vars);
+    if(res.length > 0)
+      return new Polynomial(res, this.vars);
+
+    return new Polynomial([Monomial.zero(this.vars)], this.vars)
   }
 
   /**
@@ -751,7 +762,7 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if (!this.criterion1(f,g) && !this.criterion2(f,g,newG)) {
+          if (true) {
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -771,7 +782,7 @@ export class Polynomial {
       } while (added && currIt < maxIter);
   
       // console.log("operaciones ahorradas ", opAhorradas);
-      console.log("reducciones a 0 ", reducciones);
+      // console.log("reducciones a 0 ", reducciones);
       return G;
     }
 

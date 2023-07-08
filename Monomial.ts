@@ -71,21 +71,6 @@ export class Monomial {
       this.vars = newVars;
       this.exp = newExp;
     }
-
-    /**
-     * @brief Monomial 0 in <t,x,y,z>
-     */
-    static zero(): Monomial {
-      return new Monomial(0);
-    }
-  
-
-    /**
-     * @brief Monomial 1 in <t,x,y,z>
-     */
-    static one(): Monomial {
-      return new Monomial(1);
-    }
   
     /**
      * @brief Monomial t in <t,x,y,z>
@@ -270,6 +255,14 @@ export class Monomial {
       return this.exp.every((e,idx) => e <= m.exp[idx]);
     }
   
+    static zero(vars= ["t","x","y","z"]) {
+      return new Monomial(0, new Float64Array(vars.map(v=>0)), vars)
+    }
+
+    static one(vars= ["t","x","y","z"]) {
+      return new Monomial(1, new Float64Array(vars.map(v=>0)), vars)
+    }
+
     /**
      * 
      * Checks if the monomial is equivalent to 0
