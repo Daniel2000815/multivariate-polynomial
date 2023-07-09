@@ -9,7 +9,7 @@
     "test-polynomial-groebner": "ts-mocha test/polynomial_groebner.ts",
     "test-monomial": "ts-mocha test/monomial.ts",
     "test": "ts-mocha test/*.ts",
-    "doc": "npx typedoc ./Polynomial.ts ./Monomial.ts ./Ideal.ts"
+    "doc": "npx typedoc --githubPages true ./Polynomial.ts ./Monomial.ts ./Ideal.ts"
   },
   "keywords": [
     "polynomial",

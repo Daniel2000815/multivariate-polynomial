@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">Monomial</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L6">Monomial.ts:6</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L10">Monomial.ts:10</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -77,13 +77,13 @@
 <section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class"><a id="constructor" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>constructor</span><a href="#constructor" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" id="icon-anchor-a"></path><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" id="icon-anchor-b"></path><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" id="icon-anchor-c"></path></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="constructor.new_Monomial">new <wbr/>Monomial<span class="tsd-signature-symbol">(</span>coef<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, exp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Float64Array</span>, vars<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#constructor.new_Monomial" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="constructor.new_Monomial">new <wbr/>Monomial<span class="tsd-signature-symbol">(</span>coef<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExactNumberType</span>, exp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Float64Array</span>, vars<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#constructor.new_Monomial" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>coef: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+<h5>coef: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExactNumberType</span><span class="tsd-signature-symbol"> = 0</span></h5>
 <div class="tsd-comment tsd-typography"><p>Leader coefficient</p>
 </div></li>
 <li>
@@ -94,24 +94,24 @@
 <h5>vars: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L17">Monomial.ts:17</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L21">Monomial.ts:21</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private"><a id="coef" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>coef</span><a href="#coef" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">coef<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div><aside class="tsd-sources">
+<div class="tsd-signature">coef<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ExactNumberType</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L7">Monomial.ts:7</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L11">Monomial.ts:11</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private"><a id="exp" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>exp</span><a href="#exp" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">exp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Float64Array</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L8">Monomial.ts:8</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L12">Monomial.ts:12</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private"><a id="vars" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>vars</span><a href="#vars" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">vars<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L9">Monomial.ts:9</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L13">Monomial.ts:13</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="clone" class="tsd-anchor"></a>
@@ -123,7 +123,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L153">Monomial.ts:153</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L151">Monomial.ts:151</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="divide" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>divide</span><a href="#divide" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -138,7 +138,7 @@
 <h5>m: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L242">Monomial.ts:242</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L229">Monomial.ts:229</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="divides" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>divides</span><a href="#divides" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -153,7 +153,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L264">Monomial.ts:264</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L251">Monomial.ts:251</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="equalCoef" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>equal<wbr/>Coef</span><a href="#equalCoef" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -168,7 +168,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L302">Monomial.ts:302</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L297">Monomial.ts:297</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="equalExponent" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>equal<wbr/>Exponent</span><a href="#equalExponent" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -183,7 +183,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L291">Monomial.ts:291</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L286">Monomial.ts:286</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="equals" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>equals</span><a href="#equals" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -198,7 +198,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L310">Monomial.ts:310</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L305">Monomial.ts:305</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="gcd" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>gcd</span><a href="#gcd" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -213,7 +213,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L172">Monomial.ts:172</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L170">Monomial.ts:170</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="getCoef" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Coef</span><a href="#getCoef" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -223,7 +223,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L121">Monomial.ts:121</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L116">Monomial.ts:116</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="getExp" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Exp</span><a href="#getExp" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -233,7 +233,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Float64Array</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L137">Monomial.ts:137</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L135">Monomial.ts:135</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="getVars" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Vars</span><a href="#getVars" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -243,7 +243,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L113">Monomial.ts:113</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L108">Monomial.ts:108</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="insertVariables" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>insert<wbr/>Variables</span><a href="#insertVariables" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -260,7 +260,7 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L43">Monomial.ts:43</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L53">Monomial.ts:53</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="isOne" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>is<wbr/>One</span><a href="#isOne" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -270,7 +270,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L283">Monomial.ts:283</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L278">Monomial.ts:278</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="isZero" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>is<wbr/>Zero</span><a href="#isZero" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -280,7 +280,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L275">Monomial.ts:275</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L270">Monomial.ts:270</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="lcm" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>lcm</span><a href="#lcm" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -295,7 +295,7 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L190">Monomial.ts:190</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L184">Monomial.ts:184</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="multiply" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>multiply</span><a href="#multiply" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -310,11 +310,11 @@
 <h5>m: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L224">Monomial.ts:224</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L211">Monomial.ts:211</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="plus" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>plus</span><a href="#plus" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="plus.plus-1">plus<span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#plus.plus-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="plus.plus-1">plus<span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#plus.plus-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Sum of this this monomial and <code>m</code></p>
 </div>
@@ -322,10 +322,10 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>m: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
+<h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L208">Monomial.ts:208</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L198">Monomial.ts:198</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="pushVariables" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>push<wbr/>Variables</span><a href="#pushVariables" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -342,7 +342,7 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L31">Monomial.ts:31</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L41">Monomial.ts:41</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="removeVariables" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>remove<wbr/>Variables</span><a href="#removeVariables" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -359,7 +359,7 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L55">Monomial.ts:55</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L65">Monomial.ts:65</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="sameVars" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>same<wbr/>Vars</span><a href="#sameVars" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -374,22 +374,22 @@
 <h5>m: <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L161">Monomial.ts:161</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L159">Monomial.ts:159</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="setCoef" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>set<wbr/>Coef</span><a href="#setCoef" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="setCoef.setCoef-1">set<wbr/>Coef<span class="tsd-signature-symbol">(</span>coef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setCoef.setCoef-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="setCoef.setCoef-1">set<wbr/>Coef<span class="tsd-signature-symbol">(</span>coef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExactNumberType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#setCoef.setCoef-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>coef: <span class="tsd-signature-type">number</span></h5>
+<h5>coef: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExactNumberType</span></h5>
 <div class="tsd-comment tsd-typography"><p>New coeficient of the monomial</p>
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L129">Monomial.ts:129</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L124">Monomial.ts:124</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="setExp" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>set<wbr/>Exp</span><a href="#setExp" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -404,7 +404,7 @@
 </div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L145">Monomial.ts:145</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L143">Monomial.ts:143</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="toPolynomial" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>to<wbr/>Polynomial</span><a href="#toPolynomial" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -414,28 +414,35 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Polynomial.Polynomial.html" class="tsd-signature-type" data-tsd-kind="Class">Polynomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L318">Monomial.ts:318</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L313">Monomial.ts:313</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="toString" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>to<wbr/>String</span><a href="#toString" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="toString.toString-1">to<wbr/>String<span class="tsd-signature-symbol">(</span>showProductChar<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>String representation of this monomial</p>
 </div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>showProductChar: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L326">Monomial.ts:326</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L321">Monomial.ts:321</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="one" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>one</span><a href="#one" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="one.one-1">one<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#one.one-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="one.one-1">one<span class="tsd-signature-symbol">(</span>vars<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#one.one-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography">
-<h3>Brief</h3><p>Monomial 1 in &lt;t,x,y,z&gt;</p>
-</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>vars: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L76">Monomial.ts:76</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L262">Monomial.ts:262</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="t" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>t</span><a href="#t" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -446,7 +453,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L83">Monomial.ts:83</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L78">Monomial.ts:78</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="x" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>x</span><a href="#x" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -457,7 +464,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L90">Monomial.ts:90</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L85">Monomial.ts:85</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="y" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>y</span><a href="#y" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -468,7 +475,7 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L97">Monomial.ts:97</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L92">Monomial.ts:92</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="z" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>z</span><a href="#z" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -479,18 +486,20 @@
 </div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L104">Monomial.ts:104</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L99">Monomial.ts:99</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="zero" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>zero</span><a href="#zero" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature tsd-anchor-link" id="zero.zero-1">zero<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#zero.zero-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="zero.zero-1">zero<span class="tsd-signature-symbol">(</span>vars<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a><a href="#zero.zero-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography">
-<h3>Brief</h3><p>Monomial 0 in &lt;t,x,y,z&gt;</p>
-</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>vars: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Monomial.Monomial.html" class="tsd-signature-type" data-tsd-kind="Class">Monomial</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/e13e03c/Monomial.ts#L68">Monomial.ts:68</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/Daniel2000815/multivariate-polynomial/blob/33451b0/Monomial.ts#L258">Monomial.ts:258</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
