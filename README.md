@@ -25,7 +25,7 @@ Polynomial.buchberger([f, g]); // [-2x^2  + 2x*y*z  - x + y*z - 1, -x + y*z, -1/
 
 ## Documentation
 
-See [./docs/index.html](./docs/index.html).
+See [doc page]([./docs/index.html](https://daniel2000815.github.io/multivariate-polynomial/)).
 
 ## Running Tests
 
