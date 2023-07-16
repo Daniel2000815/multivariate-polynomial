@@ -59,6 +59,7 @@ const stringTest = [
 describe("Security", function () {
   it("Initialized with no parameters returns 0", function () {
     const m = new Monomial();
+    // console.log(new Monomial(2, new Float64Array([2,0,1,1]), ["t", "x", "y", "z"]).divides(Monomial.x()))
     assert(m.equals(zero));
   });
 

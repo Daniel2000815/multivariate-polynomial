@@ -8,6 +8,7 @@
     "test-polynomial-vars": "ts-mocha test/polynomial_vars.ts",
     "test-polynomial-groebner": "ts-mocha test/polynomial_groebner.ts",
     "test-monomial": "ts-mocha test/monomial.ts",
+    "test-ideal": "ts-mocha test/ideal.ts",
     "test": "ts-mocha test/*.ts",
     "doc": "npx typedoc --githubPages true ./Polynomial.ts ./Monomial.ts ./Ideal.ts"
   },

@@ -192,9 +192,9 @@ export class Monomial {
     }
   
     /**
-     * 
-     * Sum of this this monomial and `m`
-     */
+   * Sum of this monomial with `m`
+   * @param m Monomial to add
+   */
     plus(m: Monomial) {
     
         if (!m.equalExponent(this) || !m.sameVars(this))
@@ -202,6 +202,14 @@ export class Monomial {
   
         return new Monomial(this.coef.add(m.coef), this.exp, this.vars);
       
+    }
+
+    /**
+   * Substraction of this monomial with `m`
+   * @param m Monomial to substract
+   */
+    minus(m: Monomial) {
+      return this.plus(m.multiply(-1));
     }
   
     /**

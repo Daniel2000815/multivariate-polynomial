@@ -51,7 +51,8 @@ export class Polynomial {
         else{
           // p.forEach(m =>console.log(m.getExp()));
           // p.forEach(m =>console.log(m.getVars()));
-          throw new Error(`INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS: Ring vars: ${this.vars}; Pol. vars: ${p[0].getVars()}`);
+          let errorMon = p.find(m => m.getVars().some((v,idx) => v!==this.vars[idx])) || p[0]
+          throw new Error(`INITIALIZING POLYNOMIAL WITH MONOMIALS IN DIFFERENT RINGS: Ring vars: ${this.vars}; Pol. vars: ${errorMon.getVars()}`);
         }
     }
 
@@ -98,7 +99,7 @@ export class Polynomial {
     //   this.monomials = [];
     // }
     if (!pol) return;
-    
+    // console.log("TREE ", pol, " : ",  nerdamer.tree(pol))
     const node = nerdamer.tree(pol);
     const nMinus = (pol.match(/-/g) || []).length;
     const nPlus = (pol.match(/\+/g) || []).length;
@@ -277,10 +278,15 @@ export class Polynomial {
             return num + qm.getExp()[idx];
           });
 
-          product.push(new Monomial(coef, exp, this.vars));
+          let res = new Monomial(coef, exp, this.vars);
+          if(!res.isZero())
+            product.push(res);
         });
       });
 
+      if(product.length == 0)
+        product.push(Monomial.zero(this.vars))
+      else{
       // comprobamos exponentes repetidos y los sumamos
 
       product = product.reduce(
@@ -291,11 +297,13 @@ export class Polynomial {
             const i = acc.indexOf(m);
             acc[i].setCoef(acc[i].getCoef() + cur.getCoef());
           } else acc.push(cur);
-
+          
           return acc;
         },
         []
       );
+      }
+
     }
 
     return new Polynomial(product, this.vars);
@@ -306,12 +314,12 @@ export class Polynomial {
    * @param q Polynomial or number to sum with
    */
   plus(q: Polynomial) {
-    let intersection = this.monomials.filter((x) =>
-      q.monomials.some((y) => y.equalExponent(x))
-    );
-    let difference = this.monomials
-      .concat(q.monomials)
-      .filter((x) => !intersection.some((y) => y.equalExponent(x)));
+    // let intersection = this.monomials.filter((x) =>
+    //   q.monomials.some((y) => y.equalExponent(x))
+    // );
+    // let difference = this.monomials
+    //   .concat(q.monomials)
+    //   .filter((x) => !intersection.some((y) => y.equalExponent(x)));
 
     let res : Monomial[] = [];
     let qMonomialsUsed: Monomial[] = [];
@@ -363,7 +371,7 @@ export class Polynomial {
     return (
       this.monomials.length === q.monomials.length &&
       (
-        this.monomials.length === 1 && (this.monomials[0].getCoef() === 0 && q.monomials[0].getCoef() ===0) ||
+        // this.monomials.length === 1 && (this.monomials[0].getCoef() === 0 && q.monomials[0].getCoef() ===0) ||
         this.monomials.every((m, idx) => m.equals(q.monomials[idx]))
       )
     );
@@ -762,7 +770,7 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if (true) {
+          if (!this.criterion1(f,g) && !this.criterion2(f,g,newG)) {
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -887,7 +895,7 @@ export class Polynomial {
           continue;
         }
         if(sPolfh.reduces(G) || sPolgh.reduces(G)){
-          res = true;
+          return true
         }
         else{
           const lmF = f.lm();
@@ -976,50 +984,14 @@ export class Polynomial {
     return "";
   }
 
-  /**
-   * Computes the implicit equation of a variety given the parametrizations of each variable in R3
-   * @param fx Parametrization for x
-   * @param fy Parametrization for y
-   * @param fz Parametrization for z
-   * @returns Generator of the smallest variety containing the image of (`fx`,`fy`,`fz`)
-   */
-  static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial, parameters: string[] = []){
-    if(!fx.sameVars(fy) || !fx.sameVars(fz))
-      throw new Error("PARAMETRIZATIONS IN DIFFERENT RINGS")
-
-      const elimVars = fx.getVars().filter(v => !parameters.includes(v));
-
-      // console.log("VARS: " + elimVars);
-    if(elimVars.some(v => ["x","y","z"].includes(v)))
-      throw new Error("PARAMETRIZATIONS CAN'T USE X,Y,Z VARIABLES");
-
-    const resVars = parameters.concat(["x","y","z"]);
-    const impVars = elimVars.concat(resVars);
-
-
-    const x = new Polynomial("x", impVars);
-    const y = new Polynomial("y",impVars);
-    const z = new Polynomial("z",impVars);
-    fx.pushVariables(resVars);
-    fy.pushVariables(resVars);
-    fz.pushVariables(resVars);
-    
-
-    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz)].concat());
-    let J : Polynomial[] = [];
-    
-    I.getGenerators().forEach(gen => {
-      if(!gen.useAnyVariables(elimVars)){
-        J.push(gen);
-      }
-    })
-
-    const intersection = J[0];
-    if(intersection === undefined)
-      return new Polynomial("0", resVars)
-
-    intersection.removeVariables(elimVars);
-
-    return intersection;
+  static zero(vars= ["t","x","y","z"]) {
+    return new Polynomial([new Monomial(0, new Float64Array(vars.map(v=>0)), vars)], vars)
   }
+
+  static one(vars= ["t","x","y","z"]) {
+    return new Polynomial([new Monomial(1, new Float64Array(vars.map(v=>0)), vars)], vars)
+  }
+
+ 
+  
 }

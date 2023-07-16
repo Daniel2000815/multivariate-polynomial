@@ -1,3 +1,4 @@
+import { Monomial } from "./Monomial";
 import {Polynomial} from "./Polynomial";
 
 /**
@@ -11,11 +12,7 @@ export class Ideal {
      * @param generators Generators of the Ideal
      */
     constructor(generators: Polynomial[]){
-      console.log("COMPUTING BASE OF ");
-      generators.forEach((p:Polynomial) => console.log(p.toString()))
       this.generators = Polynomial.buchbergerReduced(generators);
-      console.log("BASE: ");
-      this.generators.forEach((p:Polynomial) => console.log(p.toString()))
     }
   
     /**
@@ -57,5 +54,85 @@ export class Ideal {
       return new Ideal(res);
     }
   
+    /**
+   * Computes the implicit equation of a variety given the parametrizations of each variable in R3
+   * @param fx Numerator of the parametrization for x
+   * @param fy Numerator of the parametrization for y
+   * @param fz Numerator of the parametrization for z
+   * @param qx Denominator of the parametrization for x
+   * @param qy Denominator of the parametrization for y
+   * @param qz Denominator of the parametrization for z
+   * @param parameters Parameters of the parametric equations appart from the variables, if any
+   * @returns Generator of the smallest variety containing the image of (`fx/qx`,`fy/qy`,`fz/qz`)
+   */
+  static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial, qx: Polynomial, qy: Polynomial, qz: Polynomial, parameters: string[] = []){
+    if(!fx.sameVars(fy) || !fx.sameVars(fz) || !fx.sameVars(qx) || !fx.sameVars(qy) || !fx.sameVars(qz))
+      throw new Error("PARAMETRIZATIONS IN DIFFERENT RINGS")
+
+    // Buscamos que variables ha usado el usuario para la parametrización y que no sean x,y,z
+    let elimVars = fx.getVars().filter(v => !parameters.includes(v));
+    if(elimVars.some(v => ["x","y","z"].includes(v)))
+      throw new Error("PARAMETRIZATIONS CAN'T USE X,Y,Z VARIABLES");
+
+    // Buscamos variable auxiliar libre que después será eliminada
+    const allLetters = elimVars.join('');
+    let variableAuxiliar = 'a'
+    for (let letter of 'abcdefghijklmnopqrstuvw') {
+      // Check if the current letter is not present in the array
+      if (!allLetters.includes(letter)) {
+        variableAuxiliar = letter
+        break;
+      }
+
+      throw new Error("TOO MANY VARIABLES")
+    }
+    let posVarAux = elimVars.push(variableAuxiliar)
+   
+    // Variables del ideal J del teorema. Los parámetros son tratados como variables del cuerpo
+    let resVars = parameters.concat(["x","y","z"]);
+
+    // Variables del ideal I del teorema
+    const impVars = elimVars.concat(resVars);
+
+    // Construimos generadores de I
+    const x = new Polynomial("x", impVars);
+    const y = new Polynomial("y", impVars);
+    const z = new Polynomial("z", impVars);
+    const varAuxPol = new Polynomial(variableAuxiliar, impVars)
+
+    const variablesToAdd = [variableAuxiliar].concat(resVars);
+    fx.pushVariables(variablesToAdd); fy.pushVariables(variablesToAdd); fz.pushVariables(variablesToAdd);
+    qx.pushVariables(variablesToAdd); qy.pushVariables(variablesToAdd); qz.pushVariables(variablesToAdd);
+    
+    let expProd = impVars.map(v=>0)
+    expProd[posVarAux-1] = 1  // variable auxiliar es la ultima
+
+    const prod = Polynomial.one(impVars).multiply(qx).multiply(qy).multiply(qz).multiply(varAuxPol)
+                    // multiply(new Polynomial([new Monomial(1,new Float64Array(expProd),impVars)], impVars));
+    
+    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz), prod].concat());
+
+    // Los generadores de J son los de I que contengan solo las variables de resVars
+    let J : Polynomial[] = [];
+    
+    I.getGenerators().forEach(gen => {
+      if(!gen.useAnyVariables(elimVars)){
+        J.push(gen);
+      }
+    })
+
+    
+    if(J.length == 0)
+      return Polynomial.zero(resVars)
+    else if(J.length ==1){
+      let intersection = J[0];
+      intersection.removeVariables(elimVars);
+      return intersection;
+    }
+    else{
+      throw new Error("PARAMETRIZATION DOES NOT SATISFY AN UNIQUE IMPLICIT EQUATION")
+    }
+
+  }
   }
   
