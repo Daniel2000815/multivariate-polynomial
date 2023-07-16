@@ -1,6 +1,6 @@
 # multivariate-polynomial
 
-A javascript library to work with polynomials in $\mathbb{R}$ and multiple variables.
+A javascript library to work with rationals polynomials in multiple variables.
 
 ## Usage/Examples
 
@@ -25,7 +25,7 @@ Polynomial.buchberger([f, g]); // [-2x^2  + 2x*y*z  - x + y*z - 1, -x + y*z, -1/
 
 ## Documentation
 
-See [./docs/index.html](./docs/index.html).
+See [doc page](https://daniel2000815.github.io/multivariate-polynomial/).
 
 ## Running Tests
 
