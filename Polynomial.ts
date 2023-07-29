@@ -379,6 +379,22 @@ export class Polynomial {
 
   /**
    *
+   * Checks if this polynomial is less or equal to `q` using *lex*
+   */
+  le(q: Polynomial) {
+    return this.lm().le(q.lm());
+  }
+
+  /**
+   *
+   * Checks if this polynomial is greater or equal to `q` using *lex*
+   */
+  ge(q: Polynomial) {
+    return this.lm().ge(q.lm());
+  }
+
+  /**
+   *
    * Leader coefficient
    */
   lc() {

@@ -43,6 +43,16 @@ const eqTest = [
   { p1: "-x+y", p2: "y-x", res: true },
 ];
 
+const leTest = [
+  { p1: "0", p2: "0", le: true, ge: true },
+  { p1: "x^(10) + y^2 -z^(30)*y - t", p2: "0", le: false, ge: true },
+  { p1: "x-y", p2: "z", ge: true, le: false },
+  { p1: "t*x^3", p2: "t^2", ge: false, le: true },
+  { p1: "y", p2: "y^2", ge: false, le: true },
+  { p1: "0", p2: "-2", ge: true, le: true },
+  
+]
+
 const initTests = [
   { p: "1/x", coeff: [1], exp:[[0,-1,0,0]]},
   { p: "2x",       coeff: [2],      exp: [[0, 1, 0, 0]] },
@@ -261,6 +271,25 @@ describe("Equality", function () {
 
       it(`${t.p1} ${t.res ? "==" : "!="} ${t.p2}`, function () {
         assert.equal(new Polynomial(t.p1).equals(new Polynomial(t.p2)), t.res);
+      });
+    })(i);
+  }
+});
+
+describe("Comparisons", function () {
+  for (var i = 0; i < leTest.length; i++) {
+    (function (i) {
+      var t = leTest[i];
+
+      let f = new Polynomial(t.p1);
+      let g = new Polynomial(t.p2);
+
+      it(`${f.toString()} ${t.le ? "<=" : "!<="} ${g.toString()}`, function () {
+        assert.equal(f.le(g), t.le);  
+      });
+
+      it(`${f.toString()} ${t.le ? ">=" : "!>="} ${g.toString()}`, function () {
+        assert.equal(f.ge(g), t.ge);  
       });
     })(i);
   }

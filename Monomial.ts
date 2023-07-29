@@ -313,6 +313,38 @@ export class Monomial {
     equals(m: Monomial) {
       return this.equalExponent(m) && this.equalCoef(m);
     }
+
+    /**
+     * 
+     * Checks if this monomial is less or equal `m` using *lex*
+     */
+    le(m: Monomial) {
+      if(!this.sameVars(m))
+        throw new Error("Monomials in different rings")
+
+      for (let i = 0; i < this.exp.length; i++) {
+        if (this.exp[i] < m.getExp()[i]) return true;
+        else if (this.exp[i] > m.getExp()[i]) return false;
+      }
+
+      return true;
+    }
+
+    /**
+     * 
+     * Checks if this monomial is greater or equal `m` using *lex*
+     */
+    ge(m: Monomial) {
+      if(!this.sameVars(m))
+        throw new Error("Monomials in different rings")
+
+      for (let i = 0; i < this.exp.length; i++) {
+        if (this.exp[i] > m.getExp()[i]) return true;
+        else if (this.exp[i] < m.getExp()[i]) return false;
+      }
+
+      return true;
+    }
   
     /**
      * 

@@ -18,6 +18,13 @@ const testMonomials = [
     new Monomial(-3, Float64Array.from([3,2]), ["y","z"]),
 ];
 
+const compTests = [
+  {i:0, j:0, le:true , ge: true, eq: true},
+  {i:1, j:1, le:true , ge: true, eq: true},
+  {i:3, j:4, le:false , ge: true, eq: false},
+  {i:5, j:6, le:false , ge: true, eq: false},
+  {i:0, j:2, le:true , ge: false, eq: false},
+] 
 const gcdLcmTests = [
   {i:0, j:0, gcd: "x^2y^3z", lcm: "x^2y^3z"},
   {i:0, j:1, gcd: null, lcm: null},
@@ -153,6 +160,29 @@ describe("To string", function () {
 
       it(`${testMonomials[t.i].toString()} = ${t.res}`, function () {
         assert.equal(testMonomials[t.i].toString(), t.res);
+      });
+    })(i);
+  }
+});
+
+describe("Comparisons", function () {
+  for (var i = 0; i < compTests.length; i++) {
+    (function (i) {
+      var t = compTests[i];
+
+      it(`${testMonomials[t.i].toString()} ${t.le ? "==" : "!="} ${testMonomials[t.j].toString()}`, function () {
+        assert.equal(testMonomials[t.i].equals(testMonomials[t.j]), t.eq);
+      
+    });
+
+      it(`${testMonomials[t.i].toString()} ${t.le ? "<=" : "!<="} ${testMonomials[t.j].toString()}`, function () {
+          assert.equal(testMonomials[t.i].le(testMonomials[t.j]), t.le);
+        
+      });
+
+      it(`${testMonomials[t.i].toString()} ${t.ge ? ">=" : "!>="} ${testMonomials[t.j].toString()}`, function () {
+        assert.equal(testMonomials[t.i].ge(testMonomials[t.j]), t.ge);
+       
       });
     })(i);
   }
