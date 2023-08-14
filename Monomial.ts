@@ -1,14 +1,13 @@
 import {Polynomial} from "./Polynomial";
 import nerdamer from "nerdamer-ts";
-import { ExactNumberType, ExactNumber as N } from 'exactnumber';
+import Fraction from "./Fraction";
 
-var Fraction = require('fractional').Fraction
 
 /**
  * Represents a monomial in the ring R<t,x,y,z> or any other variables specified
  */
 export class Monomial {
-    private coef: ExactNumberType;
+    private coef: Fraction;
     private exp: Float64Array;
     private vars : string[]; 
   
@@ -18,7 +17,7 @@ export class Monomial {
      * @param exp Exponent
      * @param variables Variables of the ideal to which the monomial belongs
      */
-    constructor(coef: number | ExactNumberType = 0, exp: Float64Array = Float64Array.from([0,0,0,0]), vars: string[] = ["t","x","y","z"]) {
+    constructor(coef: number | Fraction = 0, exp: Float64Array = Float64Array.from([0,0,0,0]), vars: string[] = ["t","x","y","z"]) {
 
       // let fracStr = nerdamer(`${coef}`).evaluate().text('fractions');
       // let partes = fracStr.split("/");
@@ -29,7 +28,7 @@ export class Monomial {
       }
 
   
-      this.coef = typeof(coef) === "number" ? N(coef.toString()) : coef;
+      this.coef = typeof(coef) === "number" ? new Fraction(coef,1) : coef;
       this.exp = exp;
       this.vars = vars;
     }
@@ -50,12 +49,34 @@ export class Monomial {
      * Insert new variables before the existing ones to the ring and updates the exponent
      * @param newVars variables to add
      */
-    insertVariables(newVars : string[]){
+    insertVariables(newVars : string[], pos: number = 0){
+
       newVars = [...new Set(newVars)];
       const varsToAdd = newVars.filter(v => !this.vars.includes(v));
+      if(pos > this.vars.length)
+        throw new Error("INVALID INSERT POSITION FOR VARIABLE")
 
-      this.vars = varsToAdd.concat(this.vars);
-      this.exp = Float64Array.from(varsToAdd.map(v=>0).concat(Array.from(this.exp)));
+      // this.vars = varsToAdd.concat(this.vars);
+
+      let exp = []
+      let vars = []
+
+      for(let i=0; i<this.exp.length + varsToAdd.length; i++){
+        if(i<pos){
+          exp[i] = this.exp[i]
+          vars[i] = this.vars[i]
+        }
+        else if(i>=pos && i<pos+varsToAdd.length){
+          exp[i] = 0
+          vars[i] = varsToAdd[i-pos]
+        }
+        else{
+          exp[i] = this.exp[i - varsToAdd.length]
+          vars[i] = this.vars[i - varsToAdd.length]
+        }
+      }
+      this.exp = Float64Array.from(exp);
+      this.vars = vars;
     }
 
     /**
@@ -114,16 +135,16 @@ export class Monomial {
      * Coefficient of the monomial
      */
     getCoef() {
-      return this.coef.toNumber();
+      return this.coef;
     }
   
     /**
      * 
      * @param coef New coeficient of the monomial
      */
-    setCoef(coef: ExactNumberType | number) {
+    setCoef(coef: Fraction | number) {
       if(typeof(coef) === "number")
-        this.coef = N(coef)
+        this.coef = new Fraction(coef,1)
       else
         this.coef = coef;
     }
@@ -200,7 +221,7 @@ export class Monomial {
         if (!m.equalExponent(this) || !m.sameVars(this))
           throw new Error(`TRYING TO SUM MONOMIALS WITH DIFFERENT EXPONENT OR VARIABLES`);
   
-        return new Monomial(this.coef.add(m.coef), this.exp, this.vars);
+        return new Monomial(this.coef.plus(m.coef), this.exp, this.vars);
       
     }
 
@@ -216,15 +237,18 @@ export class Monomial {
      * 
      * Product of this this monomial and `m`
      */
-    multiply(m: Monomial | number) {
-      if (typeof m === "number") {
-        return new Monomial(this.coef.mul(m.toString()), this.exp, this.vars);
+    multiply(m: Monomial | Fraction | number) {
+      if(typeof(m) === "number"){
+        return new Monomial(this.coef.multiply(m), this.exp, this.vars);
+      }
+      if ( m instanceof Fraction) {
+        return new Monomial(this.coef.multiply(m), this.exp, this.vars);
       } else {
         if (!m.sameVars(this))
           throw new Error("TRYING TO MULTIPLY MONOMIALS WITH DIFFERENT EXPONENT OR VARIABLES");
   
         const e = this.exp.map((v, i) => v + m.exp[i]);
-        const c = this.coef.mul(m.coef);
+        const c = this.coef.multiply(m.coef);
   
         return new Monomial(c,e, this.vars);
       }
@@ -234,19 +258,22 @@ export class Monomial {
      * 
      * Division of this this monomial and `m`
      */
-    divide(m: Monomial | number){
-      if (typeof m === "number") {
-        if(m === 0)
+    divide(m: Monomial | Fraction|number){
+      if(typeof(m) === "number"){
+        return new Monomial(this.coef.divide(m), this.exp, this.vars);
+      }
+      if (m instanceof Fraction) {
+        if(m.isZero())
           throw new Error("TRYING TO DIVIDE MONOMIAL BY 0");
   
-        return new Monomial(this.coef.div(m), this.exp, this.vars);
+        return new Monomial(this.coef.divide(m), this.exp, this.vars);
       } 
       else {
         if (!m.sameVars(this))
           throw new Error("TRYING TO DIVIDE MONOMIALS WITH DIFFERENT EXPONENT OR VARIABLES");
   
         const e = this.exp.map((v, i) => v - m.exp[i]);
-        const c = this.coef.div(m.coef);
+        const c = this.coef.divide(m.coef);
   
         return new Monomial(c,e, this.vars);
       }
@@ -303,7 +330,7 @@ export class Monomial {
      * Checks if this monomial and `m` have the same coefficient value
      */
     equalCoef(m: Monomial) {
-      return this.coef.eq(m.coef);
+      return this.coef.equals(m.coef);
     }
   
     /**

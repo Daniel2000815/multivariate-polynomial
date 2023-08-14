@@ -2,8 +2,10 @@ import nerdamer from "nerdamer-ts";
 import nerdamerjs from "nerdamer";
 import {Monomial} from "./Monomial";
 import {Ideal} from "./Ideal";
+import { Console } from "console";
+import Fraction from "./Fraction";
 
-require("nerdamer/algebra");
+require("nerdamer/Algebra");
 
 /**
  * Represents a polynomial as a collection of monomials in a specified ring and using the *lex* monomial order
@@ -46,7 +48,7 @@ export class Polynomial {
           m.getExp().length === this.vars.length &&
           m.getVars().every((v,idx) => v===this.vars[idx])
         )){
-          this.monomials = p.length>1 ? p.filter(m => m.getCoef()!==0) : p;
+          this.monomials = p.length>1 ? p.filter(m => !m.getCoef().isZero()) : p;
         }
         else{
           // p.forEach(m =>console.log(m.getExp()));
@@ -223,12 +225,13 @@ export class Polynomial {
    * Inserts new variables before the existing ones to the ring and updates the exponent for every monomial
    * @param newVars variables to add
    */
-  insertVariables(newVars: string[]){
+  insertVariables(newVars: string[], pos: number = 0){
     newVars = [...new Set(newVars)];
       const varsToAdd = newVars.filter(v => !this.vars.includes(v));
       
-      this.vars = varsToAdd.concat(this.vars);
-      this.monomials.forEach(m => m.insertVariables(varsToAdd));
+      
+      this.monomials.forEach(m => m.insertVariables(varsToAdd, pos));
+      this.vars = this.monomials[0].getVars()
   }
 
   /**
@@ -258,11 +261,11 @@ export class Polynomial {
    * Product of this polynomial with `q`
    * @param q Polynomial or number to multiply with
    */
-  multiply(q: Polynomial | number) {
+  multiply(q: Polynomial | number|Fraction) {
     let product: Monomial[] = [];
 
     
-    if (typeof q === "number") {
+    if (typeof q === "number" || q instanceof Fraction) {
       if(q===0)
         return new Polynomial([Monomial.zero(this.vars)], this.vars)
 
@@ -273,7 +276,7 @@ export class Polynomial {
         return new Polynomial([Monomial.zero(this.vars)], this.vars)
       this.monomials.forEach((pm: Monomial) => {
         q.monomials.forEach((qm: Monomial) => {
-          const coef = pm.getCoef() * qm.getCoef();
+          const coef = pm.getCoef().multiply(qm.getCoef());
           const exp = pm.getExp().map(function (num, idx) {
             return num + qm.getExp()[idx];
           });
@@ -295,7 +298,7 @@ export class Polynomial {
           const m = acc.find((mon) => cur.equalExponent(mon));
           if (m !== undefined) {
             const i = acc.indexOf(m);
-            acc[i].setCoef(acc[i].getCoef() + cur.getCoef());
+            acc[i].setCoef(acc[i].getCoef().plus(cur.getCoef()));
           } else acc.push(cur);
           
           return acc;
@@ -421,8 +424,8 @@ export class Polynomial {
    *
    * Second leader coefficient
    */
-  slc() : number{
-    return this.monomials.length > 1 ? this.monomials[1].getCoef() : 0;
+  slc() : Fraction{
+    return this.monomials.length > 1 ? this.monomials[1].getCoef() : Fraction.zero();
   }
 
   /**
@@ -464,7 +467,7 @@ export class Polynomial {
     const n = this.monomials.length;
 
     return n === 0 || (n === 1 && (
-      this.monomials[0].getCoef() === 0 || Math.abs(this.monomials[0].getCoef()) < 1e-5
+      this.monomials[0].getCoef().isZero() || Math.abs(this.monomials[0].getCoef().toNumber()) < 1e-5
       ));
   }
 
@@ -524,7 +527,7 @@ export class Polynomial {
           const lcp = p.lc();
           const lcfi = fs[i].lc();
 
-          const coef = new Polynomial([xGamma.multiply(lcp / lcfi)], this.vars);
+          const coef = new Polynomial([xGamma.multiply(lcp.divide(lcfi))], this.vars);
 
           let newQi = coefs[i].plus(coef);
           // === para evitar fallos de precision ===
@@ -708,7 +711,8 @@ export class Polynomial {
       const newG = G.filter((p) => !p.equals(g));
       const expNewG = Polynomial.exp(newG);
 
-      if (g.lc() !== 1) res = false;
+      if (!g.lc().isOne())
+        res = false;
 
       for (let j = 0; j < suppG.length && res; j++) {
         for (let k = 0; k < expNewG.length && res; k++) {
@@ -786,7 +790,7 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if (!this.criterion1(f,g) && !this.criterion2(f,g,newG)) {
+          if ( !this.criterion2(f,g,newG)) {
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -812,7 +816,7 @@ export class Polynomial {
 
     /**
    * Computes a reduced Groebner base of I using Buchberger's Algorithm and Criteria
-   * @param F Generator of the ideal $I = <F>$
+   * @param F Generators of the ideal I = <F>
    * @param maxIter maximum iterations
    */
     static buchbergerReduced(F: Polynomial[], maxIter: number = 1000) {
@@ -826,12 +830,13 @@ export class Polynomial {
     static reduce(G: Polynomial[]) : Polynomial[]{
       let res : Polynomial[] = [];
       
-      G = G.map(g => g.multiply(1/g.lc()));
+      G = G.map(g => g.multiply(g.lc().inv()));
 
       for(let i=0; i<G.length; i++){
         let g = G[i];
         let div = g.divide(G.filter(e => !e.equals(g)));
-
+        // console.log("DIVIDING ", g.toString(), "BY")
+        // G.filter(e => !e.equals(g)).forEach(g=>console.log(g.toString()))
         if(!div.remainder.isZero()){
           G[i] = div.remainder;
           res.push(div.remainder);

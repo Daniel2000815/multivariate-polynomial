@@ -173,6 +173,7 @@ const groebnerComputeTests = [
   { ideal: ["x+y-1", "y-z", "z - x*y", "x*y^2+1", "x^2*z-1", "z", "t*z^2", "x*z"] },
   { ideal: ["x*y^2+2", "4*x - z^3", "x*z", "x*y^2+1", "x^2*z-1", "y^2*z", "t"] },
   { ideal: ["x^10-y^2", "x*y*z^6", "t*z^3", "x*y", "x+y-1", "y*z", "t*y+1", "x*t-2", "y^2*z", "t*x", "z", "t*z^2", "x*z"] },
+
   { ideal: ["x^2-y*z*t", "x*y+z*t^2", "x*z-t^2*y", "t*x-z*y^2", "y*z^2-x^2"] },
   { ideal: ["x*y-z", "x^2-y^2", "y^3-z^3", "x^4-t^4"] },
   { ideal: ["x*y*z", "x^2*y^2*z^2", "x^3*y^3*z^3", "t^4-x^4*y^4*z^4"] },

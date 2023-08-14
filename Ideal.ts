@@ -12,7 +12,7 @@ export class Ideal {
      * @param generators Generators of the Ideal
      */
     constructor(generators: Polynomial[]){
-      this.generators = Polynomial.buchbergerReduced(generators);
+      this.generators = Polynomial.buchbergerReduced(generators, 100000);
     }
   
     /**
@@ -68,6 +68,8 @@ export class Ideal {
   static implicitateR3(fx: Polynomial, fy: Polynomial, fz: Polynomial, qx: Polynomial, qy: Polynomial, qz: Polynomial, parameters: string[] = []){
     if(!fx.sameVars(fy) || !fx.sameVars(fz) || !fx.sameVars(qx) || !fx.sameVars(qy) || !fx.sameVars(qz))
       throw new Error("PARAMETRIZATIONS IN DIFFERENT RINGS")
+    if(qx.isZero() || qy.isZero() || qz.isZero())
+      throw new Error("DENOMINATORS CAN'T BE 0")
 
     // Buscamos que variables ha usado el usuario para la parametrización y que no sean x,y,z
     let elimVars = fx.getVars().filter(v => !parameters.includes(v));
@@ -89,7 +91,7 @@ export class Ideal {
     let posVarAux = elimVars.push(variableAuxiliar)
    
     // Variables del ideal J del teorema. Los parámetros son tratados como variables del cuerpo
-    let resVars = parameters.concat(["x","y","z"]);
+    let resVars = ["x","y","z"].concat(parameters);
 
     // Variables del ideal I del teorema
     const impVars = elimVars.concat(resVars);
@@ -101,17 +103,28 @@ export class Ideal {
     const varAuxPol = new Polynomial(variableAuxiliar, impVars)
 
     const variablesToAdd = [variableAuxiliar].concat(resVars);
-    fx.pushVariables(variablesToAdd); fy.pushVariables(variablesToAdd); fz.pushVariables(variablesToAdd);
-    qx.pushVariables(variablesToAdd); qy.pushVariables(variablesToAdd); qz.pushVariables(variablesToAdd);
+    fx.insertVariables(variablesToAdd,2); fy.insertVariables(variablesToAdd,2); fz.insertVariables(variablesToAdd,2);
+    qx.insertVariables(variablesToAdd,2); qy.insertVariables(variablesToAdd,2); qz.insertVariables(variablesToAdd,2);
     
     let expProd = impVars.map(v=>0)
     expProd[posVarAux-1] = 1  // variable auxiliar es la ultima
 
-    const prod = Polynomial.one(impVars).multiply(qx).multiply(qy).multiply(qz).multiply(varAuxPol)
+    
+
+    
+    // console.log("prod no minus 1 ", qx.multiply(qy).multiply(qz).multiply(varAuxPol).toString())
                     // multiply(new Polynomial([new Monomial(1,new Float64Array(expProd),impVars)], impVars));
     
-    const I = new Ideal([x.minus(fx), y.minus(fy), z.minus(fz), prod].concat());
+    let gen1 = qx.multiply(x).minus(fx)
+    let gen2 = qy.multiply(y).minus(fy)
+    let gen3 = qz.multiply(z).minus(fz)
+    let prod = Polynomial.one(impVars).minus(qx.multiply(qy).multiply(qz).multiply(varAuxPol))
 
+    // Polynomial.buchbergerReduced([gen1,gen2,gen3,prod]).forEach(g => console.log(g.toString()))
+    // console.log(Polynomial.buchbergerReduced([gen1,gen2,gen3,prod]).length)
+    const I = new Ideal([ gen1,gen2,gen3, prod].concat());
+    // I.generators.map(g => console.log(g.toString()))
+    // console.log(prod.toString())
     // Los generadores de J son los de I que contengan solo las variables de resVars
     let J : Polynomial[] = [];
     

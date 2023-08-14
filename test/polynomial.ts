@@ -1,6 +1,7 @@
 import assert from "assert";
 import {Polynomial} from "../Polynomial";
 import {Monomial} from "../Monomial";
+import Fraction from "../Fraction";
 
 // P.<t,x,y,z> = PolynomialRing(QQ,4, order='lex');
 // I = Ideal([x^3*y^2,y^4+z*t,t^4]);
@@ -165,6 +166,55 @@ const divisionTests = [
   { f: "6*x*t^2 + 5*x + 5*y*z^6", fs: ["3*x^4 + 5*y*t + z^2", "t^2 + x - 1", "3*x + 6*t^2", "x^2"]},
 ];
 
+const variablesTest = [
+  {
+    p: "t*x^2*y + x*y^2 + y^2*z",
+    insertVars: ["s","u"],
+    pos: 0,
+    supp:[
+      [0,0,1, 2, 1, 0],
+      [0,0,0, 1, 2, 0],
+      [0,0,0, 0, 2, 1],
+    ],
+    vars: ["s","u","t","x","y","z"]
+  },
+  {
+    p: "t*x^2*y + x*y^2 + y^2*z",
+    insertVars: ["s","u"],
+    pos: 1,
+    supp:[
+      [1,0,0, 2, 1, 0],
+      [0,0,0, 1, 2, 0],
+      [0,0,0, 0, 2, 1],
+    ],
+    vars: ["t","s","u","x","y","z"]
+  },
+  {
+    p: "t*x^2*y + x*y^2 + y^2*z",
+    insertVars: ["s","u"],
+    pos: 3,
+    supp:[
+      [1, 2, 1, 0,0,0],
+      [0, 1, 2, 0,0,0],
+      [0, 0, 2, 0,0,1],
+    ],
+    vars: ["t","x","y","s","u","z"]
+  },
+  {
+    p: "t*x^2*y + x*y^2 + y^2*z",
+    insertVars: ["s","u"],
+    pos: 4,
+    supp:[
+      [1, 2, 1, 0,0,0],
+      [0, 1, 2, 0,0,0],
+      [0, 0, 2, 1,0,0],
+    ],
+    vars: ["t","x","y","z","s","u"]
+  },
+  
+  
+]
+
 const suppTests = [
   {
     p: "x^2*y + x*y^2 + y^2",
@@ -310,6 +360,8 @@ describe("Operations", function () {
             );
             break;
           case "-":
+            console.log(new Polynomial(t.p1)
+            .minus(new Polynomial(t.p2)).toString())
             assert(
               new Polynomial(t.p1)
                 .minus(new Polynomial(t.p2))
@@ -371,7 +423,7 @@ describe("Leader coefficient, monomial and term", function () {
       it(`p=${t.p} => lc=${t.lc}, lm=${t.lm}`, function () {
         const p = new Polynomial(t.p);
         assert.equal(
-          p.lc() === t.lc && p.lm().equals(new Monomial(1,Float64Array.from(t.lm))), true
+          p.lc().equals(new Fraction(t.lc)) && p.lm().equals(new Monomial(1,Float64Array.from(t.lm))), true
         );
       });
     })(i);
@@ -387,6 +439,28 @@ describe("Is zero", function () {
       it(`${t.p} ${t.res ? " == " : " != "} 0`, function () {
         assert.equal(new Polynomial(t.p).isZero(), t.res);
       });
+    })(i);
+  }
+});
+
+describe("Insert variables", function () {
+  for (var i = 0; i < variablesTest.length; i++) {
+    (function (i) {
+      var t = variablesTest[i];
+      let p = new Polynomial(t.p);
+      p.insertVariables(t.insertVars, t.pos);
+
+      it(`${t.p} INSERT ${t.insertVars} AT POSITION ${t.pos} (VARIABLES)`, function () {
+        assert(p.getVars().every((val,idx) => val === t.vars[idx]));
+      });
+
+      it(`${t.p} INSERT ${t.insertVars} AT POSITION ${t.pos} (SUPPORT)`, function () {
+        console.log("AQ")
+        console.log(p.supp())
+        console.log(t.supp)
+        assert.deepEqual(p.supp(), t.supp.map(r=> Float64Array.from(r)));
+      });
+
     })(i);
   }
 });
