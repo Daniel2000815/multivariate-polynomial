@@ -12,7 +12,7 @@ export class Ideal {
      * @param generators Generators of the Ideal
      */
     constructor(generators: Polynomial[]){
-      this.generators = Polynomial.buchbergerReduced(generators, 100000);
+      this.generators = Polynomial.buchbergerReduced(generators, 1000000);
     }
   
     /**
@@ -135,14 +135,17 @@ export class Ideal {
     })
 
     
-    if(J.length == 0)
+    if(J.length == 0){
       return Polynomial.zero(resVars)
+      
+    }
     else if(J.length ==1){
       let intersection = J[0];
       intersection.removeVariables(elimVars);
       return intersection;
     }
     else{
+      // J.forEach(j => console.log(j.toString()))
       throw new Error("PARAMETRIZATION DOES NOT SATISFY AN UNIQUE IMPLICIT EQUATION")
     }
 

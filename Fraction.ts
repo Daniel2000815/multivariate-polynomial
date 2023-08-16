@@ -23,7 +23,16 @@ export class Fraction {
       } else {
         that = <Fraction>value;
       }
-      return new Fraction(this.integer * that.fraction + that.integer * this.fraction, this.fraction * that.fraction);
+
+      let num = this.integer * that.fraction + that.integer * this.fraction;
+      let den = this.fraction * that.fraction;
+
+      if(den < 0){
+        num = -num;
+        den = -den;
+      }
+
+      return new Fraction(num, den);
     }
   
     toNumber() : number{
@@ -34,22 +43,39 @@ export class Fraction {
         return new Fraction(-this.integer, this.fraction)
     }
     multiply(value: Fraction|number): Fraction {
-      return typeof(value) === "number" ? new Fraction(this.integer * value, this.fraction) : new Fraction(this.integer * value.integer, this.fraction * value.fraction);
+
+      let num = 1;
+      let den = 0;
+
+      
+
+      if(typeof(value) === "number"){
+        num = this.integer * value;
+        den = this.fraction;
+      }
+      else{
+        num = this.integer * value.integer;
+        den = this.fraction * value.fraction
+      }
+
+      if(den < 0){
+        num = -num;
+        den = -den;
+      }
+
+      return new Fraction(num, den) ;
     }
   
     divide(value: Fraction|number): Fraction {
-      let that: Fraction;
-      if (value instanceof Number) {
-        that = new Fraction(value);
-      } else {
-        that = <Fraction>value;
-      }
-  
-      return new Fraction(this.integer * that.fraction, this.fraction*that.integer);
+      return typeof(value) === "number" ? new Fraction(this.integer, this.fraction*value) : new Fraction(this.integer * value.fraction, this.fraction*value.integer);
+       
     }
   
     inv(){
-        return this.integer<0 ? new Fraction(-this.fraction, -this.integer) : new Fraction(this.fraction, this.integer)
+      if(this.integer === 0)
+        throw new Error ("CANT INVERT FRACTION 0")
+    
+      return this.integer<0 ? new Fraction(-this.fraction, -this.integer) : new Fraction(this.fraction, this.integer)
     }
     minus(value: Fraction|number): Fraction {
 

@@ -360,8 +360,7 @@ describe("Operations", function () {
             );
             break;
           case "-":
-            console.log(new Polynomial(t.p1)
-            .minus(new Polynomial(t.p2)).toString())
+
             assert(
               new Polynomial(t.p1)
                 .minus(new Polynomial(t.p2))
@@ -455,9 +454,6 @@ describe("Insert variables", function () {
       });
 
       it(`${t.p} INSERT ${t.insertVars} AT POSITION ${t.pos} (SUPPORT)`, function () {
-        console.log("AQ")
-        console.log(p.supp())
-        console.log(t.supp)
         assert.deepEqual(p.supp(), t.supp.map(r=> Float64Array.from(r)));
       });
 
@@ -483,10 +479,10 @@ describe("Division", function () {
         mult = mult.plus(res.remainder);
         mult = mult.minus(f);
 
-        if (!mult.isZero()) {
-          console.log("ERROR DIVIDING ", t.f, " BETWEEN ", t.fs, "MULT_ ", mult.toString());
-          // console.log(res.steps);
-        }
+        // if (!mult.isZero()) {
+        //   console.log("ERROR DIVIDING ", t.f, " BETWEEN ", t.fs, "MULT_ ", mult.toString());
+        //   // console.log(res.steps);
+        // }
         assert(mult.isZero());
       });
     })(i);

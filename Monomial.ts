@@ -397,11 +397,14 @@ export class Monomial {
       // Separar - del coeficiente
       if (this.coef.toNumber() < 0) mon = [mon.slice(0, 1), " ", mon.slice(1)].join("");
   
+      let added = 0;
+      let varsPresent = this.vars.filter((val,idx) => this.exp[idx] !== 0).length;
+
       this.vars.forEach((v, idx) => {
         const e = this.exp[idx];
-        let added = 0;
+        
         if (this.exp[idx] !== 0){
-           mon += `${v}${e !== 0 && e!==1 ? `^${this.exp[idx]}` : ""}${added>0 && idx<this.vars.length-1 && showProductChar ? "*":""}`;
+           mon += `${added>0 && added<varsPresent && showProductChar ? "*":""}${v}${e !== 0 && e!==1 ? `^${this.exp[idx]}` : ""}`;
            added++;
         }
       });

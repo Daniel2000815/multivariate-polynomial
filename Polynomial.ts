@@ -4,6 +4,7 @@ import {Monomial} from "./Monomial";
 import {Ideal} from "./Ideal";
 import { Console } from "console";
 import Fraction from "./Fraction";
+import { devNull } from "os";
 
 require("nerdamer/Algebra");
 
@@ -148,8 +149,17 @@ export class Polynomial {
       if (variable === "") variable = "1";
 
       // TODO: VER SI SE PUEDE USAR OTRA COSA QUE NO SEA EVAL
-      const c = coef === "-" ? -1 : eval(coef);
+      let c = new Fraction(1);
+      if(coef === "-")  c = new Fraction(-1,1)
+      else if(coef.includes("/")){
+        let frac = coef.split("/");
+        c = new Fraction(Number(frac[0]), Number(frac[1]))
+      }
+      else{
+        c = new Fraction(Number(coef))
+      }
       
+
       const e = this.vars.map(function (v) {
         // console.log("CHEKANDO 2", nerdamerjs('deg(t+x^2+2*x+ x*y, x*y)').toString());
         return parseFloat(nerdamerjs(`deg(${variable}, ${v})`).toString());
@@ -790,7 +800,8 @@ export class Polynomial {
           const f = fgPairs[i][0];
           const g = fgPairs[i][1];
   
-          if ( !this.criterion2(f,g,newG)) {
+          if (!this.criterion1(f,g) && !this.criterion2(f,g,newG)) {
+            reducciones++;
             const r = this.sPol(f,g).divide(
               newG
             ).remainder;
@@ -798,9 +809,6 @@ export class Polynomial {
             if (!r.isZero()) {
               G.push(r);
               added = true;
-            }
-            else{
-              reducciones++;
             }
           }
           else{
